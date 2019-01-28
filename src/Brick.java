@@ -12,6 +12,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import java.util.*;
 
 public class Brick {
 
@@ -19,33 +20,24 @@ public class Brick {
     private ImageView myHelmet;
     private int myPosX;
     private int myPosY;
-    /*
     private boolean hasPowerUp;
-    private PowerUp[] allPowerUps;
-    private PowerUp myPowerUp;
-    */
+    private ImageView myPowerUp;
+
 
     public Brick(int lives, int posX, int posY){
         myLives = lives;
         myPosX = posX;
         myPosY = posY;
+        hasPowerUp = false;
         myHelmet = new ImageView(setHelmet(lives));
         //https://stackoverflow.com/questions/2444019/how-do-i-generate-a-random-integer-between-min-and-max-in-java
         //Randomly decide whether brick is to have a powerUp and if it does, randomly assign said powerUp
-        //setPowerUp();
+        myPowerUp = new ImageView(setPowerUp());
     }
 
     public void updateBrick(int damage){
         myLives -= damage;
         myHelmet = new ImageView(setHelmet(myLives));
-        /*
-        if(this.hasPowerUp){
-            this.hasPowerUp = false;
-        }
-        else{
-            setPowerUp();
-        }
-        */
     }
 
     public Image setHelmet(int lives){
@@ -66,9 +58,9 @@ public class Brick {
         return image;
     }
 
-    /*
-    public void setPowerUp(){
-        this.hasPowerUp = false;
+
+    public Image setPowerUp(){
+        String[] allPowerUps = {"air_pump_powerup.png", "challenge_powerup.png", "gatorade_powerup.png", "stretcher_powerup.png"};
         Random rand = new Random();
         int powerInt = rand.nextInt(11);
         if(powerInt < 4){
@@ -76,11 +68,9 @@ public class Brick {
         }
         if(hasPowerUp){
             int dex = rand.nextInt(4);
-            this.myPowerUp = allPowerUps[dex];
+            Image image = new Image(this.getClass().getClassLoader().getResourceAsStream(allPowerUps[dex]));
+            return image;
         }
-        else{
-            this.myPowerUp = null;
-        }
+        return null;
     }
-    */
 }
