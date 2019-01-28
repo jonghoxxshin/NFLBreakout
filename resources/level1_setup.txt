@@ -1,31 +1,6 @@
-Buffer 10px on each edge
-column 1 = 10 + (width-20)/11
-column 2 = 2*(width-20)/11
-column 3 = 3*(width-20)/11
-column 4 = 4*(width-20)/11
-column 5 = 5*(width-20)/11
-column 6 = 6*(width-20)/11
-column 7 = 7*(width-20)/11
-column 8 = 8*(width-20)/11
-column 9 = 9*(width-20)/11
-column 10 = 10*(width-20)/11
-column 11 = 11*(width-20)/11 - 10
-
-row 1 = height/5
-row 2 = height/5 - brickHeight
-row 3 = height/5 - 2*brickHeight
-
-setup: x,y,type
-column1, row1, redskin
-column4, row1, redskin
-column5, row1, redskin
-column6, row1, redskin
-column7, row1, redskin
-column8, row1, redskin
-column11, row1, redskin
-
-column4, row2, giant
-column6, row2, giant
-column8, row2, giant
-
-column6, row3, eagle
+sizeBrick, rows, columns
+lives in each location
+100 3 9
+0 0 0 0 3 0 0 0 0
+0 0 2 0 2 0 2 0 0
+1 0 1 1 1 1 1 0 1

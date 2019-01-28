@@ -19,7 +19,7 @@ public class Ball {
 
     private ImageView myBall;
     private int myVeloX = 1;
-    private int myVeloY = -1;
+    private int myVeloY = 1;
     //0 = normal ball; 1 = powerUp big ball (breaks any brick in one hit)
     private int myBallStatus = 0;
 

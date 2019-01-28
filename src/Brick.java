@@ -15,7 +15,6 @@ import javafx.util.Duration;
 
 public class Brick {
 
-
     private int myLives;
     private ImageView myHelmet;
     private int myPosX;
