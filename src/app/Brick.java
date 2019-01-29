@@ -47,22 +47,18 @@ public class Brick {
         String res;
         if(lives == 3){
             res = "eagles_helmet.png";
-            Image image = new Image(this.getClass().getClassLoader().getResourceAsStream(res));
-            return image;
         }
-        if(lives == 2){
+        else if(lives == 2){
             res = "giants_helmet.png";
-            Image image = new Image(this.getClass().getClassLoader().getResourceAsStream(res));
-            return image;
         }
-        if(lives == 1){
+        else if(lives == 1){
             res = "redskins_helmet.png";
-            Image image = new Image(this.getClass().getClassLoader().getResourceAsStream(res));
-            return image;
         }
         else{
             return null;
         }
+        Image image = new Image(this.getClass().getClassLoader().getResourceAsStream(res));
+        return image;
     }
 
 

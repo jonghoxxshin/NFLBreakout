@@ -88,7 +88,6 @@ public class Breakout extends Application {
         root.getChildren().add(myPaddle.getPaddle());
 
         for(Brick b : myBricks){
-            System.out.println(b.getLives());
             root.getChildren().add(b.getBrick());
         }
         // respond to input
@@ -160,7 +159,7 @@ public class Breakout extends Application {
         Scanner scan = new Scanner(this.getClass().getClassLoader().getResourceAsStream(level));
         int[] firstLine = toIntArray(scan.nextLine().strip().split(" "));
 
-        int brickSize = firstLine[0];
+        //int brickSize = firstLine[0];
         int rows = firstLine[1];
         int columns = firstLine[2];
         int[][] brickLocationArray = new int[rows][columns];
@@ -184,19 +183,19 @@ public class Breakout extends Application {
 
     public void parse2D(int[][] argArray, int rows, int columns){
         double colWidth = myScene.getWidth()/columns;
-        //System.out.println(colWidth);
         for(int i=0; i<rows; i++){
             for(int j=0; j<columns; j++){
                 int lives = argArray[i][j];
                 if(lives != 0){
                     double xLoc = colWidth * (j);
                     double yLoc = colWidth * (i) + colWidth;
-                    Brick nBrick = new Brick(lives, xLoc, yLoc, colWidth-5);
+                    Brick nBrick = new Brick(lives, xLoc, yLoc, colWidth);
                     myBricks.add(nBrick);
                 }
             }
         }
     }
+
     /*
     // What to do each time a key is pressed
     private void handleMouseInput (double x, double y) {
