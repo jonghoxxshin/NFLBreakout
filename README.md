@@ -3,7 +3,7 @@ game
 
 COMPLETE THIS TEMPLATE FILE, then remove this line of text.
 
-This project implements the game of Breakout.
+This project implements the game of app.Breakout.
 
 Name: 
 
