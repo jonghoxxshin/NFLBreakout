@@ -3,4 +3,6 @@ module game.team05 {
     requires javafx.controls;
     requires javafx.graphics;
     requires javafx.media;
+
+    exports app;
 }

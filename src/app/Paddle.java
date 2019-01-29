@@ -1,8 +1,10 @@
+package app;
+
+import app.Breakout;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.shape.Rectangle;
 
 public class Paddle {
     public static final String PADDLE_IMAGE = "paddle.png";
@@ -11,7 +13,7 @@ public class Paddle {
     public static final long PADDLE_LONG_WIDTH = 50;
 
     private ImageView myPaddle;
-    private Scene myScene;
+    //private Scene myScene;
     private int myLives;
     private int paddle_speed = 20;
     private boolean speedUp = false;
@@ -19,14 +21,14 @@ public class Paddle {
 
 
 
-    public Paddle(){
+    public Paddle(Scene scene){
         Breakout b = new Breakout();
-        myScene = b.getScene();
+        //Scene myScene = b.getScene();
         Image image = new Image(this.getClass().getClassLoader().getResourceAsStream(PADDLE_IMAGE));
         myPaddle = new ImageView(image);
         myLives = 3;
-        myPaddle.setX(myScene.getWidth()/2);
-        myPaddle.setY(myScene.getHeight()-10);
+        myPaddle.setX(scene.getWidth()/2);
+        myPaddle.setY(scene.getHeight()-10);
         myPaddle.setFitHeight(PADDLE_HEIGHT);
         myPaddle.setFitWidth(PADDLE_WIDTH);
 

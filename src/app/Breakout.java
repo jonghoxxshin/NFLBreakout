@@ -1,3 +1,5 @@
+package app;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -46,7 +48,7 @@ public class Breakout extends Application {
 
     // some things we need to remember during our game
     private Scene myScene;
-    private Ball myBall; //= new Ball(myScene.getWidth()/2, myScene.getHeight()/2);
+    private Ball myBall; //= new app.Ball(myScene.getWidth()/2, myScene.getHeight()/2);
     private Paddle myPaddle;
     //private Circle myBouncer;
     //private int velocityX = 1;
@@ -61,6 +63,7 @@ public class Breakout extends Application {
     public void start (Stage stage) {
         // attach scene to the stage and display it
         myScene = setupGame(SIZE, SIZE, BACKGROUND);
+        //myPaddle = new Paddle();
         stage.setScene(myScene);
         stage.setTitle(TITLE);
         stage.show();
@@ -78,9 +81,10 @@ public class Breakout extends Application {
         var root = new Group();
         // create a place to see the shapes
         var scene = new Scene(root, width, height, background);
+        myBall = new Ball(scene.getWidth()/2, scene.getHeight()/2);
+        myPaddle = new Paddle(scene);
+        //myPaddle = new Paddle();
 
-        myBall = new Ball(myScene.getWidth()/2, myScene.getHeight()/2);
-        myPaddle = new Paddle();
 
         // order added to the group is the order in which they are drawn
         root.getChildren().add(myBall.getBall());
