@@ -1,5 +1,3 @@
-package example;
-
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -28,7 +26,7 @@ import javafx.scene.shape.Circle;
  *
  * * @author Robert C. Duvall
  */
-public class ExampleBounce extends Application {
+public class Breakout extends Application {
 
     public static final String TITLE = "Example JavaFX";
     public static final int SIZE = 400;
@@ -36,11 +34,11 @@ public class ExampleBounce extends Application {
     public static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
     public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
     public static final Paint BACKGROUND = Color.LIGHTGREEN;
-    public static final Paint HIGHLIGHT = Color.OLIVEDRAB;
-    public static final Paint BOUNCER_COLOR = Color.BROWN;
-    public static final int BOUNCER_SPEED = 60;
-    public static final Paint PADDLE_COLOR = Color.GRAY;
-    public static final int PADDLE_SPEED = 30;
+    //public static final Paint HIGHLIGHT = Color.OLIVEDRAB;
+    //public static final Paint BOUNCER_COLOR = Color.BROWN;
+    //public static final int BOUNCER_SPEED = 60;
+    //public static final Paint PADDLE_COLOR = Color.GRAY;
+    //public static final int PADDLE_SPEED = 30;
 
 
 
@@ -48,12 +46,11 @@ public class ExampleBounce extends Application {
 
     // some things we need to remember during our game
     private Scene myScene;
-    private Circle myBouncer;
-    private int velocityX = 1;
-    private int velocityY = 1;
-    private Rectangle myPaddle;
-
-
+    private Ball myBall; //= new Ball(myScene.getWidth()/2, myScene.getHeight()/2);
+    private Paddle myPaddle;
+    //private Circle myBouncer;
+    //private int velocityX = 1;
+    //private int velocityY = 1;
 
     /**
      * Initialize what will be displayed and how it will be updated.
@@ -81,21 +78,15 @@ public class ExampleBounce extends Application {
         var root = new Group();
         // create a place to see the shapes
         var scene = new Scene(root, width, height, background);
-        // make some shapes and set their properties
-        //var image = new Image(this.getClass().getClassLoader().getResourceAsStream(BOUNCER_IMAGE));
-        // x and y represent the top left corner, so center it
 
-        myBouncer = new Circle(width/2, height/2, 10);
-        myBouncer.setFill(BOUNCER_COLOR);
-        myPaddle = new Rectangle(30, 15,PADDLE_COLOR);
-        myPaddle.setY(height-20);
-        myPaddle.setX(width/2);
+        myBall = new Ball(myScene.getWidth()/2, myScene.getHeight()/2);
+        myPaddle = new Paddle();
+
         // order added to the group is the order in which they are drawn
-        root.getChildren().add(myBouncer);
-        root.getChildren().add(myPaddle);
+        root.getChildren().add(myBall.getBall());
+        root.getChildren().add(myPaddle.getPaddle());
         // respond to input
-        scene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
-        scene.setOnMouseClicked(e -> handleMouseInput(e.getX(), e.getY()));
+        scene.setOnKeyPressed(e -> myPaddle.handleKeyInput(e.getCode()));
         return scene;
     }
 
@@ -103,40 +94,55 @@ public class ExampleBounce extends Application {
     // Note, there are more sophisticated ways to animate shapes, but these simple ways work fine to start.
     private void step (double elapsedTime) {
         // update attributes
-        myBouncer.setCenterX(myBouncer.getCenterX() + BOUNCER_SPEED * velocityX * elapsedTime);
-        myBouncer.setCenterY(myBouncer.getCenterY() + BOUNCER_SPEED * velocityY * elapsedTime);
+        myBall.move(elapsedTime);
+
+        if(getBottom(myBall.getBall()) >= myScene.getHeight()){
+            myPaddle.updateLives(-1);
+            if(myPaddle.getLives() == 0){
+                //END GAME HERE
+            }
+        }
 
         // check for collisions
-        // with shapes, can check precisely
-
         //check if paddle and mover intersects
-        var intersect = Shape.intersect(myBouncer, myPaddle);
-        if(intersect.getBoundsInLocal().getWidth()!=-1){
-            velocityY *= -1;
+        if(detCollision(myBall.getBall(), myPaddle.getPaddle())){
+            myBall.updateVelo(1, -1);
         }
-
 
         //change direction in x-axis when hits a wall
-        if(myBouncer.getCenterX() <= 0 ||
-                myBouncer.getCenterX()>= myScene.getWidth() - myBouncer.getBoundsInLocal().getWidth()){
-            velocityX *= -1 * Math.random();
-        }
-        //chage direction in y-axis when hits a wall
-        if(myBouncer.getCenterY() <= 0 ){
-            velocityY *= -1;
-        }
+        myBall.wallBounce();
     }
 
-    // What to do each time a key is pressed
-    private void handleKeyInput (KeyCode code) {
-        if (code == KeyCode.RIGHT) {
-            myPaddle.setX(myPaddle.getX() + PADDLE_SPEED);
-        }
-        else if (code == KeyCode.LEFT) {
-            myPaddle.setX(myPaddle.getX() - PADDLE_SPEED);
-        }
+    public Scene getScene(){
+        return myScene;
     }
 
+    public boolean detCollision(ImageView arg1, ImageView arg2){
+        double left1 = arg1.getX();
+        double right1 = getRight(arg1);
+        double top1 = arg1.getY();
+        double bottom1 = getBottom(arg1);
+        double left2 = arg2.getX();
+        double right2 = getRight(arg2);
+        double top2 = arg2.getY();
+        double bottom2 = getBottom(arg2);
+        if((left1 <= right2 && left1 >= left2) || (right1 >= left2 && right1 <= right2)){
+            return verticalOverlap(top1, bottom1, top2, bottom2);
+        }
+        return false;
+    }
+
+    public boolean verticalOverlap(double top1, double bottom1, double top2, double bottom2){
+        return((top1 <= bottom2 && top1>=top2) || (bottom1 >= top2 && bottom1<=bottom2));
+    }
+    public double getRight(ImageView arg){
+        return arg.getX() + arg.getBoundsInLocal().getWidth();
+    }
+    public double getBottom(ImageView arg){
+        return arg.getY() + arg.getBoundsInLocal().getHeight();
+    }
+
+    /*
     // What to do each time a key is pressed
     private void handleMouseInput (double x, double y) {
 //        if (myGrower.contains(x, y)) {
@@ -144,6 +150,7 @@ public class ExampleBounce extends Application {
 //            myGrower.setScaleY(myGrower.getScaleY() * GROWER_RATE);
 //        }
     }
+    */
 
     /**
      * Start the program.
