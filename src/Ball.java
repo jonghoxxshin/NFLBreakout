@@ -23,21 +23,24 @@ public class Ball {
     //0 = normal ball; 1 = powerUp big ball (breaks any brick in one hit)
     private int myBallStatus = 0;
 
+    Breakout b = new Breakout();
+    private Scene myScene = b.getScene();
+
     //Scene myScene = new Scene();
 
-    public Ball(int xPos, int yPos){
+    public Ball(double xPos, double yPos){
         Image image = new Image(this.getClass().getClassLoader().getResourceAsStream(BALL_IMAGE));
         myBall = new ImageView(image);
         myBall.setX(xPos);
         myBall.setY(yPos);
     }
 
-    void move(double elapsedTime) {
+    public void move(double elapsedTime) {
         myBall.setX(myBall.getX() + BALL_SPEED * myVeloX * elapsedTime);
         myBall.setY(myBall.getY() + BALL_SPEED * myVeloY * elapsedTime);
     }
 
-    void wallBounce(){
+    public void wallBounce(){
         if(myBall.getX() < 0 || myBall.getX() > myScene.getWidth() - myBall.getBoundsInLocal().getWidth()){
             myVeloX *= -1;
         }
@@ -47,5 +50,14 @@ public class Ball {
         if(myBall.getY() + myBall.getBoundsInLocal().getHeight() > myScene.getHeight()){
             myVeloY = 0;
         }
+    }
+
+    public void updateVelo(int x, int y){
+        myVeloX *= x;
+        myVeloY *= y;
+    }
+
+    public ImageView getBall(){
+        return myBall;
     }
 }
