@@ -20,18 +20,19 @@ public class Brick {
 
     private int myLives;
     private ImageView myHelmet;
-    private int myPosX;
-    private int myPosY;
+    private double myPosX;
+    private double myPosY;
     private boolean hasPowerUp;
     private ImageView myPowerUp;
 
 
-    public Brick(int lives, int posX, int posY){
+    public Brick(int lives, double posX, double posY, double size){
         myLives = lives;
         myPosX = posX;
         myPosY = posY;
         hasPowerUp = false;
         myHelmet = new ImageView(setHelmet(lives));
+        setPosition(myPosX, myPosY, size);
         //https://stackoverflow.com/questions/2444019/how-do-i-generate-a-random-integer-between-min-and-max-in-java
         //Randomly decide whether brick is to have a powerUp and if it does, randomly assign said powerUp
         myPowerUp = new ImageView(setPowerUp());
@@ -46,18 +47,22 @@ public class Brick {
         String res;
         if(lives == 3){
             res = "eagles_helmet.png";
+            Image image = new Image(this.getClass().getClassLoader().getResourceAsStream(res));
+            return image;
         }
         if(lives == 2){
             res = "giants_helmet.png";
+            Image image = new Image(this.getClass().getClassLoader().getResourceAsStream(res));
+            return image;
         }
         if(lives == 1){
             res = "redskins_helmet.png";
+            Image image = new Image(this.getClass().getClassLoader().getResourceAsStream(res));
+            return image;
         }
         else{
             return null;
         }
-        Image image = new Image(this.getClass().getClassLoader().getResourceAsStream(res));
-        return image;
     }
 
 
@@ -74,5 +79,25 @@ public class Brick {
             return image;
         }
         return null;
+    }
+
+    public void setPosition(double xPos, double yPos, double size){
+        myHelmet.setX(xPos);
+        myHelmet.setY(yPos);
+        myHelmet.setFitHeight(size);
+        myHelmet.setFitWidth(size);
+    }
+
+    public double getX(){
+        return myPosX;
+    }
+    public double getY(){
+        return myPosY;
+    }
+    public ImageView getBrick(){
+        return myHelmet;
+    }
+    public int getLives(){
+        return myLives;
     }
 }
