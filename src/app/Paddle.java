@@ -1,7 +1,11 @@
 package app;
 
 import app.Breakout;
+import javafx.animation.Timeline;
+import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -28,7 +32,7 @@ public class Paddle {
         //Scene myScene = b.getScene();
         Image image = new Image(this.getClass().getClassLoader().getResourceAsStream(PADDLE_IMAGE));
         myPaddle = new ImageView(image);
-        myLives = 3;
+        myLives = 0;
         myScene = scene;
         myPaddle.setX(myScene.getWidth()/2);
         myPaddle.setY(myScene.getHeight()-10);
@@ -36,7 +40,6 @@ public class Paddle {
         myPaddle.setFitWidth(PADDLE_WIDTH);
 
     }
-    
 
     public void speedPowerUp(){
         if(this.speedUp){
@@ -55,8 +58,11 @@ public class Paddle {
         }
     }
 
-    public void updateLives(int i){
+    public void updateLives(int i, Timeline anim){
         myLives += i;
+        if(myLives < 0){
+            loseAlert(anim);
+        }
     }
 
     public ImageView getPaddle(){
@@ -75,7 +81,20 @@ public class Paddle {
         else if(code == KeyCode.LEFT && !(myPaddle.getX() <= 0)){
             myPaddle.setX(myPaddle.getX() - paddle_speed);
         }
+    }
 
+    public void loseAlert(Timeline anim){
+        anim.stop();
+        //https://stackoverflow.com/questions/28937392/javafx-alerts-and-their-size
+        Alert a = new Alert(AlertType.INFORMATION);
+        a.setTitle("YOU LOSE");
+        a.setHeaderText("LOSER");
+        a.setResizable(true);
+        String version = System.getProperty("java.version");
+        String content = String.format("You ran out of lives! You lost!", version);
+        a.setContentText(content);
+        a.show();
+        //anim.playFromStart();
     }
 
 

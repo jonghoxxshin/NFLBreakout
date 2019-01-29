@@ -6,12 +6,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class Ball {
-    public static final int BALL_SPEED = 50;
+    public static final int BALL_SPEED = 70;
     public static final String BALL_IMAGE = "cowboys_logo.png";
 
     private ImageView myBall;
     private int myVeloX = 1;
-    private int myVeloY = 1;
+    private int myVeloY = -1;
     //0 = normal ball; 1 = powerUp big ball (breaks any brick in one hit)
     private int myBallStatus = 0;
     private double mySize;
@@ -49,16 +49,21 @@ public class Ball {
         }
     }
 
-    public void updateVelo(double x, double y){
+    public void updateVeloBrick(double x, double y){
+        myVeloX *= x;
+        myVeloY *= y;
+    }
+
+    public void updateVeloPaddle(double x, double y){
         myVeloX += x;
         myVeloY *= y;
     }
 
     public void resetBall(){
         myBall.setX(myScene.getWidth()/2);
-        myBall.setY(myScene.getHeight()/2);
+        myBall.setY(myScene.getHeight()-50);
         myVeloX = 1;
-        myVeloY = 1;
+        myVeloY = -1;
     }
 
     public double getXVelo(){

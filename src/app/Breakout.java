@@ -5,6 +5,7 @@ import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -48,6 +49,9 @@ public class Breakout extends Application {
     private ArrayList<Brick> myBricks;
     private int myLevel;
     private String[] levelFiles = {"level1_setup.txt", "level2_setup.txt", "level3_setup.txt"};
+    private Timeline animation;
+    private int bricksLeft;
+    //private Group root;
 
     /**
      * Initialize what will be displayed and how it will be updated.
@@ -64,7 +68,7 @@ public class Breakout extends Application {
         stage.show();
         // attach "game loop" to timeline to play it
         var frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> step(SECOND_DELAY));
-        var animation = new Timeline();
+        //var animation = new Timeline();
         animation.setCycleCount(Timeline.INDEFINITE);
         animation.getKeyFrames().add(frame);
         animation.play();
@@ -77,11 +81,14 @@ public class Breakout extends Application {
         // create a place to see the shapes
         var scene = new Scene(root, width, height, background);
         myScene = scene;
-        myBall = new Ball(scene.getWidth()/2, scene.getHeight()/2);
+        myBall = new Ball(scene.getWidth()/2, scene.getHeight()-50);
         myPaddle = new Paddle(scene);
         myLevel = 1;
+        animation = new Timeline();
         //Read in level set up and brick location
         readBricks();
+        //System.out.println(myBricks.size());
+        bricksLeft = myBricks.size();
 
         // order added to the group is the order in which they are drawn
         root.getChildren().add(myBall.getBall());
@@ -102,22 +109,25 @@ public class Breakout extends Application {
         myBall.move(elapsedTime);
 
         if(getBottom(myBall.getBall()) >= myScene.getHeight()){
-            myPaddle.updateLives(-1);
-            if(myPaddle.getLives() <= 0){
-                System.out.println("YOU LOSE");
-            }
+            myPaddle.updateLives(-1, animation);
             myBall.resetBall();
         }
 
         // check for collisions
-        //check if paddle and mover intersects
         if(detCollision(myBall.getBall(), myPaddle.getPaddle())){
             double diff = getCenter(myBall.getBall()) - getCenter(myPaddle.getPaddle());
-            double xChange = diff * 0.04;
-            double currXVelo = myBall.getXVelo();
-            myBall.updateVelo(xChange, -1);
+            double xChange = diff * 0.05;
+            myBall.updateVeloPaddle(xChange, -1);
         }
-
+        for(Brick b: myBricks){
+            if(detCollision(myBall.getBall(), b.getBrick())){
+                myBall.updateVeloBrick(-1, -1);
+                bricksLeft -= b.updateBrick(1);
+                if(bricksLeft == 0){
+                    winLevel(animation);
+                }
+            }
+        }
         //change direction in x-axis when hits a wall
         myBall.wallBounce(myScene);
     }
@@ -126,7 +136,11 @@ public class Breakout extends Application {
         return myScene;
     }
 
+    //Need is side collision and is top/bottom collision
     public boolean detCollision(ImageView arg1, ImageView arg2){
+        if(!arg1.visibleProperty().getValue() || !arg2.visibleProperty().getValue()){
+            return false;
+        }
         double left1 = arg1.getX();
         double right1 = getRight(arg1);
         double top1 = arg1.getY();
@@ -194,6 +208,19 @@ public class Breakout extends Application {
                 }
             }
         }
+    }
+
+    public void winLevel(Timeline anim){
+        anim.stop();
+        //https://stackoverflow.com/questions/28937392/javafx-alerts-and-their-size
+        Alert a = new Alert(Alert.AlertType.INFORMATION);
+        a.setTitle("YOU WIN");
+        a.setHeaderText("WINNER");
+        a.setResizable(true);
+        String version = System.getProperty("java.version");
+        String content = String.format("You broke all the bricks! You beat the level!", version);
+        a.setContentText(content);
+        a.show();
     }
 
     /*

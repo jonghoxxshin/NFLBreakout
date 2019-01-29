@@ -24,6 +24,7 @@ public class Brick {
     private double myPosY;
     private boolean hasPowerUp;
     private ImageView myPowerUp;
+    private double mySize;
 
 
     public Brick(int lives, double posX, double posY, double size){
@@ -31,6 +32,7 @@ public class Brick {
         myPosX = posX;
         myPosY = posY;
         hasPowerUp = false;
+        mySize = size;
         myHelmet = new ImageView(setHelmet(lives));
         setPosition(myPosX, myPosY, size);
         //https://stackoverflow.com/questions/2444019/how-do-i-generate-a-random-integer-between-min-and-max-in-java
@@ -38,9 +40,17 @@ public class Brick {
         myPowerUp = new ImageView(setPowerUp());
     }
 
-    public void updateBrick(int damage){
-        myLives -= damage;
-        myHelmet = new ImageView(setHelmet(myLives));
+    public int updateBrick(int damage){
+        this.myLives -= damage;
+        if(myLives <= 0){
+            this.myHelmet.setVisible(false);
+            return 1;
+        }
+        else{
+            //System.out.println("HERE, SHOULD CHANGE PIC");
+            this.myHelmet = new ImageView(setHelmet(myLives));
+            return 0;
+        }
     }
 
     public Image setHelmet(int lives){
