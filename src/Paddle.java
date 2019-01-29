@@ -50,7 +50,7 @@ public class Paddle {
         }
     }
 
-    public void upDateLive(int i){
+    public void updateLives(int i){
         this.myLives += i;
     }
 
