@@ -16,6 +16,10 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.shape.Circle;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Scanner;
+
 
 /**
  * A basic example JavaFX program for the first lab.
@@ -31,7 +35,7 @@ import javafx.scene.shape.Circle;
 public class Breakout extends Application {
 
     public static final String TITLE = "Example JavaFX";
-    public static final int SIZE = 400;
+    public static final int SIZE = 600;
     public static final int FRAMES_PER_SECOND = 60;
     public static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
     public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
@@ -41,6 +45,9 @@ public class Breakout extends Application {
     private Scene myScene;
     private Ball myBall; //= new app.Ball(myScene.getWidth()/2, myScene.getHeight()/2);
     private Paddle myPaddle;
+    private ArrayList<Brick> myBricks;
+    private int myLevel;
+    private String[] levelFiles = {"level1_setup.txt", "level2_setup.txt", "level3_setup.txt"};
 
     /**
      * Initialize what will be displayed and how it will be updated.
@@ -69,13 +76,21 @@ public class Breakout extends Application {
         var root = new Group();
         // create a place to see the shapes
         var scene = new Scene(root, width, height, background);
+        myScene = scene;
         myBall = new Ball(scene.getWidth()/2, scene.getHeight()/2);
         myPaddle = new Paddle(scene);
-
+        myLevel = 1;
+        //Read in level set up and brick location
+        readBricks();
 
         // order added to the group is the order in which they are drawn
         root.getChildren().add(myBall.getBall());
         root.getChildren().add(myPaddle.getPaddle());
+
+        for(Brick b : myBricks){
+            System.out.println(b.getLives());
+            root.getChildren().add(b.getBrick());
+        }
         // respond to input
         scene.setOnKeyPressed(e -> myPaddle.handleKeyInput(e.getCode()));
         return scene;
@@ -99,8 +114,8 @@ public class Breakout extends Application {
         //check if paddle and mover intersects
         if(detCollision(myBall.getBall(), myPaddle.getPaddle())){
             double diff = getCenter(myBall.getBall()) - getCenter(myPaddle.getPaddle());
-            System.out.println(diff);
             double xChange = diff * 0.04;
+            double currXVelo = myBall.getXVelo();
             myBall.updateVelo(xChange, -1);
         }
 
@@ -138,6 +153,50 @@ public class Breakout extends Application {
     }
     public double getCenter(ImageView arg){ return arg.getX() + getRight(arg) / 2;}
 
+    public void readBricks(){
+        myBricks = new ArrayList<>();
+        int line = 0;
+        String level = levelFiles[myLevel-1];
+        Scanner scan = new Scanner(this.getClass().getClassLoader().getResourceAsStream(level));
+        int[] firstLine = toIntArray(scan.nextLine().strip().split(" "));
+
+        int brickSize = firstLine[0];
+        int rows = firstLine[1];
+        int columns = firstLine[2];
+        int[][] brickLocationArray = new int[rows][columns];
+
+        while(scan.hasNext()){
+            int[] intData = toIntArray(scan.nextLine().strip().split(" "));
+            brickLocationArray[line] = intData;
+            line++;
+        }
+        parse2D(brickLocationArray, rows, columns);
+    }
+
+    public int[] toIntArray(String[] args){
+        int length = args.length;
+        int[] intArray = new int[length];
+        for(int i=0; i<length; i++){
+            intArray[i] = Integer.parseInt(args[i]);
+        }
+        return intArray;
+    }
+
+    public void parse2D(int[][] argArray, int rows, int columns){
+        double colWidth = myScene.getWidth()/columns;
+        //System.out.println(colWidth);
+        for(int i=0; i<rows; i++){
+            for(int j=0; j<columns; j++){
+                int lives = argArray[i][j];
+                if(lives != 0){
+                    double xLoc = colWidth * (j);
+                    double yLoc = colWidth * (i) + colWidth;
+                    Brick nBrick = new Brick(lives, xLoc, yLoc, colWidth-5);
+                    myBricks.add(nBrick);
+                }
+            }
+        }
+    }
     /*
     // What to do each time a key is pressed
     private void handleMouseInput (double x, double y) {

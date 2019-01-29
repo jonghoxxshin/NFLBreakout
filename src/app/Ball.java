@@ -50,13 +50,19 @@ public class Ball {
     }
 
     public void updateVelo(double x, double y){
-        myVeloX *= x;
+        myVeloX += x;
         myVeloY *= y;
     }
 
     public void resetBall(){
         myBall.setX(myScene.getWidth()/2);
         myBall.setY(myScene.getHeight()/2);
+        myVeloX = 1;
+        myVeloY = 1;
+    }
+
+    public double getXVelo(){
+        return myVeloX;
     }
 
     public ImageView getBall(){
