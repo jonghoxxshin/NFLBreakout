@@ -8,9 +8,9 @@ import javafx.scene.input.KeyCode;
 
 public class Paddle {
     public static final String PADDLE_IMAGE = "paddle.png";
-    public static final long PADDLE_WIDTH = 30;
+    public static final long PADDLE_WIDTH = 40;
     public static final long PADDLE_HEIGHT = 10;
-    public static final long PADDLE_LONG_WIDTH = 50;
+    public static final long PADDLE_LONG_WIDTH = 80;
 
     private ImageView myPaddle;
     //private Scene myScene;
