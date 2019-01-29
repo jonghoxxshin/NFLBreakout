@@ -36,23 +36,11 @@ public class Breakout extends Application {
     public static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
     public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
     public static final Paint BACKGROUND = Color.LIGHTGREEN;
-    //public static final Paint HIGHLIGHT = Color.OLIVEDRAB;
-    //public static final Paint BOUNCER_COLOR = Color.BROWN;
-    //public static final int BOUNCER_SPEED = 60;
-    //public static final Paint PADDLE_COLOR = Color.GRAY;
-    //public static final int PADDLE_SPEED = 30;
-
-
-
-
 
     // some things we need to remember during our game
     private Scene myScene;
     private Ball myBall; //= new app.Ball(myScene.getWidth()/2, myScene.getHeight()/2);
     private Paddle myPaddle;
-    //private Circle myBouncer;
-    //private int velocityX = 1;
-    //private int velocityY = 1;
 
     /**
      * Initialize what will be displayed and how it will be updated.
@@ -83,7 +71,6 @@ public class Breakout extends Application {
         var scene = new Scene(root, width, height, background);
         myBall = new Ball(scene.getWidth()/2, scene.getHeight()/2);
         myPaddle = new Paddle(scene);
-        //myPaddle = new Paddle();
 
 
         // order added to the group is the order in which they are drawn
@@ -102,19 +89,23 @@ public class Breakout extends Application {
 
         if(getBottom(myBall.getBall()) >= myScene.getHeight()){
             myPaddle.updateLives(-1);
-            if(myPaddle.getLives() == 0){
-                //END GAME HERE
+            if(myPaddle.getLives() <= 0){
+                System.out.println("YOU LOSE");
             }
+            myBall.resetBall();
         }
 
         // check for collisions
         //check if paddle and mover intersects
         if(detCollision(myBall.getBall(), myPaddle.getPaddle())){
-            myBall.updateVelo(1, -1);
+            double diff = getCenter(myBall.getBall()) - getCenter(myPaddle.getPaddle());
+            System.out.println(diff);
+            double xChange = diff * 0.04;
+            myBall.updateVelo(xChange, -1);
         }
 
         //change direction in x-axis when hits a wall
-        myBall.wallBounce();
+        myBall.wallBounce(myScene);
     }
 
     public Scene getScene(){
@@ -145,6 +136,7 @@ public class Breakout extends Application {
     public double getBottom(ImageView arg){
         return arg.getY() + arg.getBoundsInLocal().getHeight();
     }
+    public double getCenter(ImageView arg){ return arg.getX() + getRight(arg) / 2;}
 
     /*
     // What to do each time a key is pressed
