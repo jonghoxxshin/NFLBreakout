@@ -34,10 +34,12 @@ public class Brick {
         hasPowerUp = false;
         mySize = size;
         myHelmet = new ImageView(setHelmet(lives));
-        setPosition(myPosX, myPosY, size);
+        setPosition(myHelmet, myPosX, myPosY, size);
         //https://stackoverflow.com/questions/2444019/how-do-i-generate-a-random-integer-between-min-and-max-in-java
         //Randomly decide whether brick is to have a powerUp and if it does, randomly assign said powerUp
         myPowerUp = new ImageView(setPowerUp());
+        myPowerUp.setVisible(false);
+        setPosition(myPowerUp, myPosX, myPosY, size/2);
     }
 
     public int updateBrick(int damage){
@@ -80,18 +82,19 @@ public class Brick {
             this.hasPowerUp = true;
         }
         if(hasPowerUp){
-            int dex = rand.nextInt(4);
+            //int dex = rand.nextInt(4);
+            int dex = 1;
             Image image = new Image(this.getClass().getClassLoader().getResourceAsStream(allPowerUps[dex]));
             return image;
         }
         return null;
     }
 
-    public void setPosition(double xPos, double yPos, double size){
-        myHelmet.setX(xPos);
-        myHelmet.setY(yPos);
-        myHelmet.setFitHeight(size);
-        myHelmet.setFitWidth(size);
+    public void setPosition(ImageView pic, double xPos, double yPos, double size){
+        pic.setX(xPos);
+        pic.setY(yPos);
+        pic.setFitHeight(size);
+        pic.setFitWidth(size);
     }
 
     public double getX(){
@@ -105,5 +108,18 @@ public class Brick {
     }
     public int getLives(){
         return myLives;
+    }
+
+    public ImageView getPowerUp(){
+        if(hasPowerUp){
+            return myPowerUp;
+        }
+        return null;
+    }
+
+    public ImageView showPowerUp(){
+        myPowerUp.setX(myPowerUp.getX() + 20);
+        myPowerUp.setVisible(true);
+        return myPowerUp;
     }
 }

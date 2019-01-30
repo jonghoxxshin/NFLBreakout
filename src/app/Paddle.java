@@ -25,14 +25,14 @@ public class Paddle {
     private boolean speedUp = false;
     private boolean lengthUp = false;
 
-
+    private cheatKeys ch = new cheatKeys();
 
     public Paddle(Scene scene){
         Breakout b = new Breakout();
         //Scene myScene = b.getScene();
         Image image = new Image(this.getClass().getClassLoader().getResourceAsStream(PADDLE_IMAGE));
         myPaddle = new ImageView(image);
-        myLives = 0;
+        myLives = 3;
         myScene = scene;
         myPaddle.setX(myScene.getWidth()/2);
         myPaddle.setY(myScene.getHeight()-10);
@@ -80,6 +80,10 @@ public class Paddle {
         }
         else if(code == KeyCode.LEFT && !(myPaddle.getX() <= 0)){
             myPaddle.setX(myPaddle.getX() - paddle_speed);
+        }
+        else if(code == KeyCode.L){
+            myLives++;
+            //System.out.println(myLives);
         }
     }
 

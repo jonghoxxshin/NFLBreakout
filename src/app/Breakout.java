@@ -9,6 +9,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
@@ -51,6 +52,8 @@ public class Breakout extends Application {
     private String[] levelFiles = {"level1_setup.txt", "level2_setup.txt", "level3_setup.txt"};
     private Timeline animation;
     private int bricksLeft;
+    private ArrayList<ImageView> myPowers;
+    private cheatKeys ch = new cheatKeys();
     //private Group root;
 
     /**
@@ -85,6 +88,7 @@ public class Breakout extends Application {
         myPaddle = new Paddle(scene);
         myLevel = 1;
         animation = new Timeline();
+        myPowers = new ArrayList<>();
         //Read in level set up and brick location
         readBricks();
         //System.out.println(myBricks.size());
@@ -96,9 +100,14 @@ public class Breakout extends Application {
 
         for(Brick b : myBricks){
             root.getChildren().add(b.getBrick());
+            if(b.getPowerUp() != null){
+                root.getChildren().add(b.getPowerUp());
+            }
         }
+
         // respond to input
         scene.setOnKeyPressed(e -> myPaddle.handleKeyInput(e.getCode()));
+        //scene.setOnKeyPressed(e -> handleCheatKeys(e.getCode()));
         return scene;
     }
 
@@ -126,8 +135,17 @@ public class Breakout extends Application {
                 if(bricksLeft == 0){
                     winLevel(animation);
                 }
+                if(b.getLives() == 0 && b.getPowerUp() != null){
+                    System.out.println("HERE");
+                    myPowers.add(b.showPowerUp());
+                }
             }
         }
+
+        for(ImageView p: myPowers){
+            dropPowerUp(p, elapsedTime);
+        }
+
         //change direction in x-axis when hits a wall
         myBall.wallBounce(myScene);
     }
@@ -210,6 +228,18 @@ public class Breakout extends Application {
         }
     }
 
+    public void dropPowerUp(ImageView power, double time){
+        power.setY(power.getY() + 100 * time);
+        if(detCollision(power, myPaddle.getPaddle())){
+            power.setVisible(false);
+            myPaddle.updateLives(1, animation);
+            System.out.println(myPaddle.getLives());
+        }
+        if(power.getY() >= myScene.getHeight()){
+            power.setVisible(false);
+        }
+    }
+
     public void winLevel(Timeline anim){
         anim.stop();
         //https://stackoverflow.com/questions/28937392/javafx-alerts-and-their-size
@@ -230,6 +260,13 @@ public class Breakout extends Application {
 //            myGrower.setScaleX(myGrower.getScaleX() * GROWER_RATE);
 //            myGrower.setScaleY(myGrower.getScaleY() * GROWER_RATE);
 //        }
+    }
+    */
+    /*
+    public void handleCheatKeys(KeyCode code){
+        if(code == KeyCode.R){
+            myBall.resetBall();
+        }
     }
     */
 
