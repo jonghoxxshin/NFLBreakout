@@ -136,7 +136,7 @@ public class Breakout extends Application {
                     winLevel(animation);
                 }
                 if(b.getLives() == 0 && b.getPowerUp() != null){
-                    System.out.println("HERE");
+                    //System.out.println("HERE");
                     myPowers.add(b.showPowerUp());
                 }
             }
@@ -189,7 +189,7 @@ public class Breakout extends Application {
         int line = 0;
         String level = levelFiles[myLevel-1];
         Scanner scan = new Scanner(this.getClass().getClassLoader().getResourceAsStream(level));
-        int[] firstLine = toIntArray(scan.nextLine().strip().split(" "));
+        int[] firstLine = toIntArray(scan.nextLine().split(" "));
 
         //int brickSize = firstLine[0];
         int rows = firstLine[1];
@@ -197,7 +197,7 @@ public class Breakout extends Application {
         int[][] brickLocationArray = new int[rows][columns];
 
         while(scan.hasNext()){
-            int[] intData = toIntArray(scan.nextLine().strip().split(" "));
+            int[] intData = toIntArray(scan.nextLine().split(" "));
             brickLocationArray[line] = intData;
             line++;
         }
