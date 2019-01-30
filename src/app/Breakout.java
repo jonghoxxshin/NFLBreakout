@@ -50,10 +50,12 @@ public class Breakout extends Application {
     private ArrayList<Brick> myBricks;
     private int myLevel;
     private String[] levelFiles = {"level1_setup.txt", "level2_setup.txt", "level3_setup.txt"};
+
     private Timeline animation;
     private int bricksLeft;
     private ArrayList<ImageView> myPowers;
     private cheatKeys ch = new cheatKeys();
+    private int myScore;
     //private Group root;
 
     /**
@@ -84,7 +86,7 @@ public class Breakout extends Application {
         // create a place to see the shapes
         var scene = new Scene(root, width, height, background);
         myScene = scene;
-        myBall = new Ball(scene.getWidth()/2, scene.getHeight()-50);
+        myBall = new Ball(scene.getWidth()/2, scene.getHeight()-100);
         myPaddle = new Paddle(scene);
         myLevel = 1;
         animation = new Timeline();
@@ -106,7 +108,7 @@ public class Breakout extends Application {
         }
 
         // respond to input
-        scene.setOnKeyPressed(e -> myPaddle.handleKeyInput(e.getCode()));
+        scene.setOnKeyPressed(e -> myPaddle.handleKeyInput(e.getCode(), myBall));
         //scene.setOnKeyPressed(e -> handleCheatKeys(e.getCode()));
         return scene;
     }
@@ -130,13 +132,14 @@ public class Breakout extends Application {
         }
         for(Brick b: myBricks){
             if(detCollision(myBall.getBall(), b.getBrick())){
+                myScore++;
                 myBall.updateVeloBrick(-1, -1);
                 bricksLeft -= b.updateBrick(1);
                 if(bricksLeft == 0){
                     winLevel(animation);
                 }
                 if(b.getLives() == 0 && b.getPowerUp() != null){
-                    System.out.println("HERE");
+                    //System.out.println("HERE");
                     myPowers.add(b.showPowerUp());
                 }
             }
@@ -189,7 +192,7 @@ public class Breakout extends Application {
         int line = 0;
         String level = levelFiles[myLevel-1];
         Scanner scan = new Scanner(this.getClass().getClassLoader().getResourceAsStream(level));
-        int[] firstLine = toIntArray(scan.nextLine().strip().split(" "));
+        int[] firstLine = toIntArray(scan.nextLine().split(" "));
 
         //int brickSize = firstLine[0];
         int rows = firstLine[1];
@@ -197,7 +200,7 @@ public class Breakout extends Application {
         int[][] brickLocationArray = new int[rows][columns];
 
         while(scan.hasNext()){
-            int[] intData = toIntArray(scan.nextLine().strip().split(" "));
+            int[] intData = toIntArray(scan.nextLine().split(" "));
             brickLocationArray[line] = intData;
             line++;
         }
@@ -231,6 +234,7 @@ public class Breakout extends Application {
     public void dropPowerUp(ImageView power, double time){
         power.setY(power.getY() + 100 * time);
         if(detCollision(power, myPaddle.getPaddle())){
+            myScore++;
             power.setVisible(false);
             myPaddle.updateLives(1, animation);
             System.out.println(myPaddle.getLives());

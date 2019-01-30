@@ -32,13 +32,12 @@ public class Paddle {
         //Scene myScene = b.getScene();
         Image image = new Image(this.getClass().getClassLoader().getResourceAsStream(PADDLE_IMAGE));
         myPaddle = new ImageView(image);
-        myLives = 3;
+        myLives = 0;
         myScene = scene;
         myPaddle.setX(myScene.getWidth()/2);
         myPaddle.setY(myScene.getHeight()-10);
         myPaddle.setFitHeight(PADDLE_HEIGHT);
         myPaddle.setFitWidth(PADDLE_WIDTH);
-
     }
 
     public void speedPowerUp(){
@@ -74,7 +73,7 @@ public class Paddle {
         return myLives;
     }
 
-    public void handleKeyInput(KeyCode code){
+    public void handleKeyInput(KeyCode code, Ball ball){
         if(code == KeyCode.RIGHT && !(myPaddle.getX() + PADDLE_WIDTH >= myScene.getWidth())){
             myPaddle.setX(myPaddle.getX() + paddle_speed);
         }
@@ -84,6 +83,11 @@ public class Paddle {
         else if(code == KeyCode.L){
             myLives++;
             //System.out.println(myLives);
+        }
+        else if(code == KeyCode.R){
+            myPaddle.setX(myScene.getWidth()/2);
+            myPaddle.setY(myScene.getHeight()-10);
+            ball.resetBall();
         }
     }
 
