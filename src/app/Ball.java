@@ -61,7 +61,7 @@ public class Ball {
 
     public void resetBall(){
         myBall.setX(myScene.getWidth()/2);
-        myBall.setY(myScene.getHeight()-50);
+        myBall.setY(myScene.getHeight()-100);
         myVeloX = 1;
         myVeloY = -1;
     }
