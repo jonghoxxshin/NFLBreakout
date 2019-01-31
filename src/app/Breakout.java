@@ -6,19 +6,12 @@ import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import javafx.scene.shape.Circle;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -44,7 +37,6 @@ public class Breakout extends Application {
     public static final Paint BACKGROUND = Color.LIGHTGREEN;
 
     // some things we need to remember during our game
-    private Scene myScene;
     private Ball myBall; //= new app.Ball(myScene.getWidth()/2, myScene.getHeight()/2);
     private Paddle myPaddle;
     private ArrayList<Brick> myBricks;
@@ -58,6 +50,13 @@ public class Breakout extends Application {
     private int myScore;
     //private Group root;
 
+    private Stage stage;
+    private Splash splash;
+
+    private boolean gameStarted;
+
+    //variables for splash that needs to be moved
+
     /**
      * Initialize what will be displayed and how it will be updated.
      *
@@ -66,18 +65,22 @@ public class Breakout extends Application {
     @Override
     public void start (Stage stage) {
         // attach scene to the stage and display it
-        myScene = setupGame(SIZE, SIZE, BACKGROUND);
-        //myPaddle = new Paddle();
-        stage.setScene(myScene);
+        this.stage = stage;
+        gameStarted = false;
+
+        splash = new Splash();
+        stage.setScene(splash.setupSplash(SIZE, SIZE, BACKGROUND));
         stage.setTitle(TITLE);
         stage.show();
+
         // attach "game loop" to timeline to play it
         var frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> step(SECOND_DELAY));
-        //var animation = new Timeline();
+        var animation = new Timeline();
         animation.setCycleCount(Timeline.INDEFINITE);
         animation.getKeyFrames().add(frame);
         animation.play();
     }
+
 
     // Create the game's "scene": what shapes will be in the game and their starting properties
     private Scene setupGame (int width, int height, Paint background) {
@@ -85,9 +88,8 @@ public class Breakout extends Application {
         var root = new Group();
         // create a place to see the shapes
         var scene = new Scene(root, width, height, background);
-        myScene = scene;
         myBall = new Ball(scene.getWidth()/2, scene.getHeight()-100);
-        myPaddle = new Paddle(scene);
+        myPaddle = new Paddle(width, height);
         myLevel = 1;
         animation = new Timeline();
         myPowers = new ArrayList<>();
@@ -113,48 +115,52 @@ public class Breakout extends Application {
         return scene;
     }
 
+
     // Change properties of shapes to animate them
     // Note, there are more sophisticated ways to animate shapes, but these simple ways work fine to start.
     private void step (double elapsedTime) {
-        // update attributes
-        myBall.move(elapsedTime);
+        if(!splash.getSplash()) {
+            if(!gameStarted) {
+                stage.setScene(setupGame(SIZE,SIZE,BACKGROUND));
+                gameStarted = true;
+            }
 
-        if(getBottom(myBall.getBall()) >= myScene.getHeight()){
-            myPaddle.updateLives(-1, animation);
-            myBall.resetBall();
-        }
+            // update attributes
+            myBall.move(elapsedTime);
 
-        // check for collisions
-        if(detCollision(myBall.getBall(), myPaddle.getPaddle())){
-            double diff = getCenter(myBall.getBall()) - getCenter(myPaddle.getPaddle());
-            double xChange = diff * 0.05;
-            myBall.updateVeloPaddle(xChange, -1);
-        }
-        for(Brick b: myBricks){
-            if(detCollision(myBall.getBall(), b.getBrick())){
-                myScore++;
-                myBall.updateVeloBrick(-1, -1);
-                bricksLeft -= b.updateBrick(1);
-                if(bricksLeft == 0){
-                    winLevel(animation);
-                }
-                if(b.getLives() == 0 && b.getPowerUp() != null){
-                    //System.out.println("HERE");
-                    myPowers.add(b.showPowerUp());
+            if (getBottom(myBall.getBall()) >= stage.getHeight()) {
+                myPaddle.updateLives(-1, animation);
+                myBall.resetBall(stage.getWidth(), stage.getHeight());
+            }
+
+            // check for collisions
+            if (detCollision(myBall.getBall(), myPaddle.getPaddle())) {
+                double diff = getCenter(myBall.getBall()) - getCenter(myPaddle.getPaddle());
+                double xChange = diff * 0.05;
+                myBall.updateVeloPaddle(xChange, -1);
+            }
+            for (Brick b : myBricks) {
+                if (detCollision(myBall.getBall(), b.getBrick())) {
+                    myScore++;
+                    myBall.updateVeloBrick(-1, -1);
+                    bricksLeft -= b.updateBrick(1);
+                    if (bricksLeft == 0) {
+                        winLevel(animation);
+                    }
+                    if (b.getLives() == 0 && b.getPowerUp() != null) {
+                        //System.out.println("HERE");
+                        myPowers.add(b.showPowerUp());
+                    }
                 }
             }
+
+            for (ImageView p : myPowers) {
+                dropPowerUp(p, elapsedTime);
+            }
+
+            //change direction in x-axis when hits a wall
+            myBall.wallBounce(stage);
         }
-
-        for(ImageView p: myPowers){
-            dropPowerUp(p, elapsedTime);
-        }
-
-        //change direction in x-axis when hits a wall
-        myBall.wallBounce(myScene);
-    }
-
-    public Scene getScene(){
-        return myScene;
     }
 
     //Need is side collision and is top/bottom collision
@@ -217,7 +223,7 @@ public class Breakout extends Application {
     }
 
     public void parse2D(int[][] argArray, int rows, int columns){
-        double colWidth = myScene.getWidth()/columns;
+        double colWidth = stage.getWidth()/columns;
         for(int i=0; i<rows; i++){
             for(int j=0; j<columns; j++){
                 int lives = argArray[i][j];
@@ -239,7 +245,7 @@ public class Breakout extends Application {
             myPaddle.updateLives(1, animation);
             System.out.println(myPaddle.getLives());
         }
-        if(power.getY() >= myScene.getHeight()){
+        if(power.getY() >= stage.getHeight()){
             power.setVisible(false);
         }
     }
