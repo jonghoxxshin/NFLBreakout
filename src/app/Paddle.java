@@ -32,7 +32,7 @@ public class Paddle {
         Breakout b = new Breakout();
         Image image = new Image(this.getClass().getClassLoader().getResourceAsStream(PADDLE_IMAGE));
         myPaddle = new ImageView(image);
-        myLives = 0;
+        myLives = 3;
         myPaddle.setX(screenWidth/2);
         myPaddle.setY(screenHeight-10);
         myPaddle.setFitHeight(PADDLE_HEIGHT);
