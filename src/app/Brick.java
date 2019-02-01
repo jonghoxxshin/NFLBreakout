@@ -103,9 +103,11 @@ public class Brick {
     public double getY(){
         return myPosY;
     }
+
     public ImageView getBrick(){
         return myHelmet;
     }
+
     public int getLives(){
         return myLives;
     }
