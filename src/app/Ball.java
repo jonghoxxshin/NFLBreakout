@@ -4,6 +4,7 @@ import app.Breakout;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 
 public class Ball {
     public static final int BALL_SPEED = 70;
@@ -15,11 +16,6 @@ public class Ball {
     //0 = normal ball; 1 = powerUp big ball (breaks any brick in one hit)
     private int myBallStatus = 0;
     private double mySize;
-
-    Breakout b = new Breakout();
-    private Scene myScene = b.getScene();
-
-    //Scene myScene = new Scene();
 
     public Ball(double xPos, double yPos){
         Image image = new Image(this.getClass().getClassLoader().getResourceAsStream(BALL_IMAGE));
@@ -36,15 +32,14 @@ public class Ball {
         myBall.setY(myBall.getY() + BALL_SPEED * myVeloY * elapsedTime);
     }
 
-    public void wallBounce(Scene scene){
-        myScene = scene;
-        if(myBall.getX() < 0 || myBall.getX() > myScene.getWidth() - myBall.getBoundsInLocal().getWidth()){
+    public void wallBounce(Stage stage){
+        if(myBall.getX() < 0 || myBall.getX() > stage.getWidth() - myBall.getBoundsInLocal().getWidth()){
             myVeloX *= -1;
         }
         if(myBall.getY() < 0){
             myVeloY *= -1;
         }
-        if(myBall.getY() + myBall.getBoundsInLocal().getHeight() > myScene.getHeight()){
+        if(myBall.getY() + myBall.getBoundsInLocal().getHeight() > stage.getHeight()){
             myVeloY = 0;
         }
     }
@@ -59,9 +54,9 @@ public class Ball {
         myVeloY *= y;
     }
 
-    public void resetBall(){
-        myBall.setX(myScene.getWidth()/2);
-        myBall.setY(myScene.getHeight()-100);
+    public void resetBall(double screenWidth, double screenHeight){
+        myBall.setX(screenWidth/2);
+        myBall.setY(screenHeight-100);
         myVeloX = 1;
         myVeloY = -1;
     }
