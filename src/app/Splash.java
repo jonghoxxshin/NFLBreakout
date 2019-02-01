@@ -16,6 +16,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -23,14 +24,11 @@ import java.security.Key;
 
 public class Splash{
 
-    public final static String HOW_TO = "Move the paddle side-ways pressing left and right keyboard\n " +
-            "on your keyboard and break all the opponent \n" +
-            " blocks with out dropping the ball!";
+    public final static String HOW_TO = "Move the paddle by pressing the left and right arrows on your keyboard. \n" +
+            "Break all the opponent blocks before losing all your lives!";
     public static final int FRAMES_PER_SECOND = 60;
     public static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
     public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
-
-
 
 
     private Text title;
@@ -84,12 +82,12 @@ public class Splash{
         Image nfl = new Image("nfl.png");
         ImageView mvNfl = new ImageView(nfl);
 
-        var scene = new Scene(root, bkg.getWidth(), bkg.getHeight(), background);
+        var scene = new Scene(root, bkg.getWidth(), bkg.getHeight() - 100, background);
 
         //title
-        title = new Text(bkg.getWidth()* 0.32, bkg.getHeight() * 0.4, "NFL Break-Out!\n");
+        title = new Text(scene.getWidth()* 0.27, scene.getHeight() * 0.49, "NFL Break-Out!\n");
         title.setFont(Font.font("Helvetica", FontWeight.EXTRA_BOLD, 45));
-        title.setFill(Color.SADDLEBROWN);
+        title.setFill(Color.BLUE);
 
         //nfl logo
         mvNfl.setFitWidth(100);
@@ -100,20 +98,22 @@ public class Splash{
 
 
         //instruction
-        instruction = new Text(150, 500, HOW_TO);
+        instruction = new Text(scene.getWidth() * 0.2, scene.getHeight() *0.57, HOW_TO);
+        //instruction = new Text(HOW_TO);
+        //instruction.setTextAlignment(TextAlignment.CENTER);
         instruction.setFont(Font.font("Helvetica", FontWeight.BOLD, 15));
-        instruction.setFill(Color.SADDLEBROWN);
+        instruction.setFill(Color.BLUE);
 
 
         //start text
-        gameStart = new Text(100, 600, "Press space or click the Button to start playing!");
+        gameStart = new Text(scene.getWidth()*0.21, scene.getHeight()*0.69, "Press space or click the Button to start playing!");
         gameStart.setFont(Font.font("Helvetica", FontWeight.EXTRA_BOLD, 20));
-        gameStart.setFill(Color.SADDLEBROWN);
+        gameStart.setFill(Color.BLUE);
 
         //start button
-        startButton = new Button("Click me!");
+        startButton = new Button("Start!");
         startButton.setLayoutX(300);
-        startButton.setLayoutY(630);
+        startButton.setLayoutY(scene.getHeight()-100);
         startButton.setOnAction(e -> splash = false);
 
         root.getChildren().add(mv);

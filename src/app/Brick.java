@@ -78,7 +78,7 @@ public class Brick {
         String[] allPowerUps = {"air_pump_powerup.png", "challenge_powerup.png", "gatorade_powerup.png", "stretcher_powerup.png"};
         Random rand = new Random();
         int powerInt = rand.nextInt(11);
-        if(powerInt < 4){
+        if(powerInt < 2){
             this.hasPowerUp = true;
         }
         if(hasPowerUp){
@@ -103,9 +103,11 @@ public class Brick {
     public double getY(){
         return myPosY;
     }
+
     public ImageView getBrick(){
         return myHelmet;
     }
+
     public int getLives(){
         return myLives;
     }

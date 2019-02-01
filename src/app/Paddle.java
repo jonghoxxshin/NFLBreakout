@@ -32,7 +32,7 @@ public class Paddle {
         Breakout b = new Breakout();
         Image image = new Image(this.getClass().getClassLoader().getResourceAsStream(PADDLE_IMAGE));
         myPaddle = new ImageView(image);
-        myLives = 3;
+        myLives = 4;
         myPaddle.setX(screenWidth/2);
         myPaddle.setY(screenHeight-10);
         myPaddle.setFitHeight(PADDLE_HEIGHT);
@@ -56,11 +56,13 @@ public class Paddle {
         }
     }
 
-    public void updateLives(int i, Timeline anim){
+    public int updateLives(int i, Timeline anim){
         myLives += i;
-        if(myLives < 0){
-            loseAlert(anim);
+        if(myLives < 1){
+            //loseAlert(anim);
+            return 0;
         }
+        return 1;
     }
 
     public ImageView getPaddle(){
@@ -101,7 +103,6 @@ public class Paddle {
         String content = String.format("You ran out of lives! You lost!", version);
         a.setContentText(content);
         a.show();
-        //anim.playFromStart();
     }
 
 
