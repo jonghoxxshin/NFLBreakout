@@ -1,9 +1,6 @@
 package app;
 
-import app.Breakout;
 import javafx.animation.Timeline;
-import javafx.application.Application;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
@@ -19,7 +16,6 @@ public class Paddle {
 
 
     private ImageView myPaddle;
-    private Scene myScene;
     private int myLives;
     private int paddle_speed = 20;
     private boolean speedUp = false;
@@ -27,15 +23,18 @@ public class Paddle {
 
     private cheatKeys ch = new cheatKeys();
 
-    public Paddle(Scene scene){
+    double screenWidth, screenHeight;
+
+    public Paddle(double screenWidth, double screenHeight){
+        this.screenWidth = screenWidth;
+        this.screenHeight = screenHeight;
+
         Breakout b = new Breakout();
-        //Scene myScene = b.getScene();
         Image image = new Image(this.getClass().getClassLoader().getResourceAsStream(PADDLE_IMAGE));
         myPaddle = new ImageView(image);
-        myLives = 0;
-        myScene = scene;
-        myPaddle.setX(myScene.getWidth()/2);
-        myPaddle.setY(myScene.getHeight()-10);
+        myLives = 3;
+        myPaddle.setX(screenWidth/2);
+        myPaddle.setY(screenHeight-10);
         myPaddle.setFitHeight(PADDLE_HEIGHT);
         myPaddle.setFitWidth(PADDLE_WIDTH);
     }
@@ -74,7 +73,7 @@ public class Paddle {
     }
 
     public void handleKeyInput(KeyCode code, Ball ball){
-        if(code == KeyCode.RIGHT && !(myPaddle.getX() + PADDLE_WIDTH >= myScene.getWidth())){
+        if(code == KeyCode.RIGHT && !(myPaddle.getX() + PADDLE_WIDTH >= screenWidth)){
             myPaddle.setX(myPaddle.getX() + paddle_speed);
         }
         else if(code == KeyCode.LEFT && !(myPaddle.getX() <= 0)){
@@ -85,9 +84,9 @@ public class Paddle {
             //System.out.println(myLives);
         }
         else if(code == KeyCode.R){
-            myPaddle.setX(myScene.getWidth()/2);
-            myPaddle.setY(myScene.getHeight()-10);
-            ball.resetBall();
+            myPaddle.setX(screenWidth/2);
+            myPaddle.setY(screenHeight-10);
+            ball.resetBall(screenWidth, screenHeight);
         }
     }
 

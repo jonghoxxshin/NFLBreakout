@@ -6,6 +6,7 @@ import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -20,10 +21,8 @@ import javafx.util.Duration;
 
 import java.security.Key;
 
-public class Splash extends Application {
+public class Splash{
 
-    public final static int SIZE = 400;
-    public final static String TITLE = "Splash Page";
     public final static String HOW_TO = "Move the paddle side-ways pressing left and right keyboard\n " +
             "on your keyboard and break all the opponent \n" +
             " blocks with out dropping the ball!";
@@ -40,6 +39,7 @@ public class Splash extends Application {
     private Paint BACKGROUND = Color.WHITE;
     private Button startButton;
     private Scene myScene;
+    private boolean splash = true;
 
 
 //    public Scene Splash(){
@@ -62,22 +62,22 @@ public class Splash extends Application {
 //        return myView;
 //    }
 
-    @Override
-    public void start (Stage stage){
-        myScene = setupSplash(SIZE,SIZE,BACKGROUND);
-        stage.setScene(myScene);
-        stage.setTitle(TITLE);
-        stage.show();
+//    @Override
+//    public void start (Stage stage){
+//        myScene = setupSplash(SIZE,SIZE,BACKGROUND);
+//        stage.setScene(myScene);
+//        stage.setTitle(TITLE);
+//        stage.show();
+//
+//        var frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> step(SECOND_DELAY));
+//        var animation = new Timeline();
+//        animation.setCycleCount(Timeline.INDEFINITE);
+//        animation.getKeyFrames().add(frame);
+//        animation.play();
+//    }
 
-        var frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> step(SECOND_DELAY));
-        var animation = new Timeline();
-        animation.setCycleCount(Timeline.INDEFINITE);
-        animation.getKeyFrames().add(frame);
-        animation.play();
-    }
 
-
-    private Scene setupSplash(int width, int height, Paint background){
+    public Scene setupSplash(int width, int height, Paint background){
         var root = new Group();
         Image bkg = new Image("Half.png");
         ImageView mv = new ImageView(bkg);
@@ -97,6 +97,8 @@ public class Splash extends Application {
         mvNfl.setX(300);
         mvNfl.setY(150);
 
+
+
         //instruction
         instruction = new Text(150, 500, HOW_TO);
         instruction.setFont(Font.font("Helvetica", FontWeight.BOLD, 15));
@@ -112,7 +114,7 @@ public class Splash extends Application {
         startButton = new Button("Click me!");
         startButton.setLayoutX(300);
         startButton.setLayoutY(630);
-
+        startButton.setOnAction(e -> splash = false);
 
         root.getChildren().add(mv);
         root.getChildren().add(title);
@@ -121,38 +123,28 @@ public class Splash extends Application {
         root.getChildren().add(gameStart);
         root.getChildren().add(instruction);
 
-
-        scene.setOnKeyPressed(e -> handleKeyInput(e.getCode()) );
         scene.setOnMouseClicked(e -> handleMouseInput(e.getX(),e.getY()));
 
         return scene;
     }
 
-
-
-    private void step (double elapsedTIme){
-
-    }
-
-
-
-    public void handleKeyInput(KeyCode code){
-        if(code == KeyCode.SPACE){
-
-        }
-
-    }
-
     public void handleMouseInput(double x, double y){
+        this.setSplash(false);
+    }
 
+    public boolean getSplash(){
+        return splash;
+    }
 
+    public void setSplash(boolean bool){
+        this.splash = bool;
     }
 
 
-    public static void main (String[] args){
-        launch(args);
-
-    }
+//    public static void main (String[] args){
+//        launch(args);
+//
+//    }
 
 
 
