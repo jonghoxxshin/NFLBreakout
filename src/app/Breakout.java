@@ -32,7 +32,7 @@ import java.util.Scanner;
 public class Breakout extends Application {
 
     public static final String TITLE = "Example JavaFX";
-    public static final int SIZE = 700;
+    public static final int SIZE = 600;
     public static final int FRAMES_PER_SECOND = 60;
     public static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
     public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
@@ -55,6 +55,7 @@ public class Breakout extends Application {
     private Stage stage;
     private Splash splash;
     private Text display;
+    public boolean isPaused;
 
 
 
@@ -72,6 +73,7 @@ public class Breakout extends Application {
         // attach scene to the stage and display it
         this.stage = stage;
         gameStarted = false;
+        isPaused = false;
 
         splash = new Splash();
         stage.setScene(splash.setupSplash(SIZE, SIZE, BACKGROUND));
@@ -108,7 +110,6 @@ public class Breakout extends Application {
         display.setX(width/2);
         display.setY(height/2);
 
-
         // order added to the group is the order in which they are drawn
         root.getChildren().add(myBall.getBall());
         root.getChildren().add(myPaddle.getPaddle());
@@ -131,7 +132,7 @@ public class Breakout extends Application {
     // Change properties of shapes to animate them
     // Note, there are more sophisticated ways to animate shapes, but these simple ways work fine to start.
     private void step (double elapsedTime) {
-        if(!splash.getSplash()) {
+        if(!splash.getSplash() && !isPaused) {
             if(!gameStarted) {
                 stage.setScene(setupGame(SIZE,SIZE,BACKGROUND));
                 gameStarted = true;
@@ -139,25 +140,37 @@ public class Breakout extends Application {
 
             // update attributes
             myBall.move(elapsedTime);
-            display.setText("lives remaining : " + Integer.toString(myPaddle.getLives()) +"\n" + "level one");
+            display.setText("Lives remaining: " + Integer.toString(myPaddle.getLives()) +"\n Level: " + myLevel + "\n Score: " + myScore);
 
-            if (getBottom(myBall.getBall()) >= stage.getHeight()) {
-                myPaddle.updateLives(-1, animation);
+            if (getBottom(myBall.getBall()) >= SIZE) {
+                if(myPaddle.updateLives(-1, animation) == 0){
+                    isPaused = true;
+                    myPaddle.loseAlert(animation);
+                };
                 myBall.resetBall(stage.getWidth(), stage.getHeight());
             }
 
             // check for collisions
             if (detCollision(myBall.getBall(), myPaddle.getPaddle())) {
-                double diff = getCenter(myBall.getBall()) - getCenter(myPaddle.getPaddle());
-                double xChange = diff * 0.05;
-                myBall.updateVeloPaddle(xChange, -1);
+                if(!sideCollision(myBall.getBall(), myPaddle.getPaddle())){
+                    double diff = getCenter(myBall.getBall()) - getCenter(myPaddle.getPaddle());
+                    //double xChange = diff * 0.05;
+                    myBall.updateVeloPaddle(0, -1);
+                }
             }
             for (Brick b : myBricks) {
                 if (detCollision(myBall.getBall(), b.getBrick())) {
                     myScore++;
-                    myBall.updateVeloBrick(-1, -1);
+                    if(sideCollision(myBall.getBall(), b.getBrick())){
+                        myBall.updateVeloBrick(-1, 1);
+                    }
+                    else{
+                        myBall.updateVeloBrick(1, -1);
+                    }
+                    //myBall.updateVeloBrick(-1, -1);
                     bricksLeft -= b.updateBrick(1);
                     if (bricksLeft == 0) {
+                        animation.stop();
                         winLevel(animation);
                     }
                     if (b.getLives() == 0 && b.getPowerUp() != null) {
@@ -172,7 +185,7 @@ public class Breakout extends Application {
             }
 
             //change direction in x-axis when hits a wall
-            myBall.wallBounce(stage);
+            myBall.wallBounce(SIZE);
         }
     }
 
@@ -206,6 +219,17 @@ public class Breakout extends Application {
     }
     public double getCenter(ImageView arg){ return arg.getX() + getRight(arg) / 2;}
 
+    public boolean sideCollision(ImageView arg1, ImageView arg2){
+        if(arg1.getY() <= arg2.getY() || (getBottom(arg1)>= getBottom(arg2))){
+            //System.out.println("SIDE COLLISION");
+            return false;
+        }
+        else{
+            //System.out.println("TOP COLLISION");
+            return true;
+        }
+    }
+
     public void readBricks(){
         myBricks = new ArrayList<>();
         int line = 0;
@@ -236,13 +260,13 @@ public class Breakout extends Application {
     }
 
     public void parse2D(int[][] argArray, int rows, int columns){
-        double colWidth = stage.getWidth()/columns;
+        double colWidth = SIZE/columns;
         for(int i=0; i<rows; i++){
             for(int j=0; j<columns; j++){
                 int lives = argArray[i][j];
                 if(lives != 0){
                     double xLoc = colWidth * (j);
-                    double yLoc = colWidth * (i) + colWidth;
+                    double yLoc = colWidth * (i);
                     Brick nBrick = new Brick(lives, xLoc, yLoc, colWidth);
                     myBricks.add(nBrick);
                 }
@@ -264,6 +288,7 @@ public class Breakout extends Application {
     }
 
     public void winLevel(Timeline anim){
+        isPaused = true;
         anim.stop();
         //https://stackoverflow.com/questions/28937392/javafx-alerts-and-their-size
         Alert a = new Alert(Alert.AlertType.INFORMATION);
@@ -276,9 +301,11 @@ public class Breakout extends Application {
         a.show();
     }
 
+    /*
     public void updateDisplay(double width, double height){
 
     }
+*/
 
     /*
     // What to do each time a key is pressed

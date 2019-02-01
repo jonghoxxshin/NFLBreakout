@@ -34,11 +34,13 @@ public class powerUp {
 
     //Bricks have powerUp variable, if break breaks --> if brick.hasPowerUp --> brick.powerUp.dropPower()
     public void dropPower(double time){
-        if(myPower.isVisible() == false){
+        if(myPower.visibleProperty().getValue() == false){
             myPower.setVisible(true);
         }
         myPower.setY(myPower.getY() + 100*time);
     }
+
+    //If brick has powerup add it to scene brick.hasPowerUp --> brick.powerUp.setMyPowerUP() add to root/group
 
 
 

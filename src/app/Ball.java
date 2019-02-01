@@ -11,7 +11,7 @@ public class Ball {
     public static final String BALL_IMAGE = "cowboys_logo.png";
 
     private ImageView myBall;
-    private int myVeloX = 1;
+    private int myVeloX = -1;
     private int myVeloY = -1;
     //0 = normal ball; 1 = powerUp big ball (breaks any brick in one hit)
     private int myBallStatus = 0;
@@ -32,14 +32,17 @@ public class Ball {
         myBall.setY(myBall.getY() + BALL_SPEED * myVeloY * elapsedTime);
     }
 
-    public void wallBounce(Stage stage){
-        if(myBall.getX() < 0 || myBall.getX() > stage.getWidth() - myBall.getBoundsInLocal().getWidth()){
-            myVeloX *= -1;
+    public void wallBounce(int sceneSize){
+        //if(myBall.getX() <= 0 || myBall.getX() + mySize >= stage.getWidth()){
+        if(myBall.getX() <= 0 || myBall.getX() + mySize >= sceneSize){
+
+                myVeloX *= -1;
         }
-        if(myBall.getY() < 0){
+        if(myBall.getY() <= 0){
             myVeloY *= -1;
         }
-        if(myBall.getY() + myBall.getBoundsInLocal().getHeight() > stage.getHeight()){
+        //if(myBall.getY() + myBall.getBoundsInLocal().getHeight() > stage.getHeight()){
+        if(myBall.getY() + myBall.getBoundsInLocal().getHeight() > sceneSize){
             myVeloY = 0;
         }
     }
