@@ -7,7 +7,7 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 public class Ball {
-    public static final int BALL_SPEED = 70;
+    public static final int BALL_SPEED = 200;
     public static final String BALL_IMAGE = "cowboys_logo.png";
 
     private ImageView myBall;

@@ -6,6 +6,7 @@ import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -22,8 +23,6 @@ import java.security.Key;
 
 public class Splash{
 
-    public final static int SIZE = 400;
-    public final static String TITLE = "Splash Page";
     public final static String HOW_TO = "Move the paddle side-ways pressing left and right keyboard\n " +
             "on your keyboard and break all the opponent \n" +
             " blocks with out dropping the ball!";
@@ -97,6 +96,8 @@ public class Splash{
         mvNfl.setFitHeight(100);
         mvNfl.setX(300);
         mvNfl.setY(150);
+
+
 
         //instruction
         instruction = new Text(150, 500, HOW_TO);

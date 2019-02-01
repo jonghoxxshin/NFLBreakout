@@ -6,9 +6,11 @@ import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -30,7 +32,7 @@ import java.util.Scanner;
 public class Breakout extends Application {
 
     public static final String TITLE = "Example JavaFX";
-    public static final int SIZE = 600;
+    public static final int SIZE = 700;
     public static final int FRAMES_PER_SECOND = 60;
     public static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
     public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
@@ -52,6 +54,9 @@ public class Breakout extends Application {
 
     private Stage stage;
     private Splash splash;
+    private Text display;
+
+
 
     private boolean gameStarted;
 
@@ -98,9 +103,16 @@ public class Breakout extends Application {
         //System.out.println(myBricks.size());
         bricksLeft = myBricks.size();
 
+        //display
+        display = new Text("" );
+        display.setX(width/2);
+        display.setY(height/2);
+
+
         // order added to the group is the order in which they are drawn
         root.getChildren().add(myBall.getBall());
         root.getChildren().add(myPaddle.getPaddle());
+        root.getChildren().add(display);
 
         for(Brick b : myBricks){
             root.getChildren().add(b.getBrick());
@@ -127,6 +139,7 @@ public class Breakout extends Application {
 
             // update attributes
             myBall.move(elapsedTime);
+            display.setText("lives remaining : " + Integer.toString(myPaddle.getLives()) +"\n" + "level one");
 
             if (getBottom(myBall.getBall()) >= stage.getHeight()) {
                 myPaddle.updateLives(-1, animation);
@@ -261,6 +274,10 @@ public class Breakout extends Application {
         String content = String.format("You broke all the bricks! You beat the level!", version);
         a.setContentText(content);
         a.show();
+    }
+
+    public void updateDisplay(double width, double height){
+
     }
 
     /*
