@@ -5,6 +5,7 @@ import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
@@ -43,7 +44,7 @@ public class Breakout extends Application {
     private Paddle myPaddle;
     private ArrayList<Brick> myBricks;
     private int myLevel;
-    private String[] levelFiles = {"level1_setup.txt", "level2_setup.txt", "level3_setup.txt"};
+
 
     private Timeline animation;
     private int bricksLeft;
@@ -57,10 +58,9 @@ public class Breakout extends Application {
     private Text display;
     public boolean isPaused;
 
-
-
     private boolean gameStarted;
 
+    private DataReader myDataReader;
     //variables for splash that needs to be moved
 
     /**
@@ -101,8 +101,15 @@ public class Breakout extends Application {
         animation = new Timeline();
         myPowers = new ArrayList<>();
         //Read in level set up and brick location
-        readBricks();
+
+        DataReader setBricks = new DataReader(width, height);
+        setBricks.readBricks(myLevel);
+        myBricks = setBricks.getMyBricks();
+        System.out.println(myBricks);
+
         //System.out.println(myBricks.size());
+
+
         bricksLeft = myBricks.size();
 
         //display
@@ -146,7 +153,7 @@ public class Breakout extends Application {
                 if(myPaddle.updateLives(-1, animation) == 0){
                     isPaused = true;
                     myPaddle.loseAlert(animation);
-                };
+                }
                 myBall.resetBall(stage.getWidth(), stage.getHeight());
             }
 
@@ -230,49 +237,6 @@ public class Breakout extends Application {
         }
     }
 
-    public void readBricks(){
-        myBricks = new ArrayList<>();
-        int line = 0;
-        String level = levelFiles[myLevel-1];
-        Scanner scan = new Scanner(this.getClass().getClassLoader().getResourceAsStream(level));
-        int[] firstLine = toIntArray(scan.nextLine().split(" "));
-
-        //int brickSize = firstLine[0];
-        int rows = firstLine[1];
-        int columns = firstLine[2];
-        int[][] brickLocationArray = new int[rows][columns];
-
-        while(scan.hasNext()){
-            int[] intData = toIntArray(scan.nextLine().split(" "));
-            brickLocationArray[line] = intData;
-            line++;
-        }
-        parse2D(brickLocationArray, rows, columns);
-    }
-
-    public int[] toIntArray(String[] args){
-        int length = args.length;
-        int[] intArray = new int[length];
-        for(int i=0; i<length; i++){
-            intArray[i] = Integer.parseInt(args[i]);
-        }
-        return intArray;
-    }
-
-    public void parse2D(int[][] argArray, int rows, int columns){
-        double colWidth = SIZE/columns;
-        for(int i=0; i<rows; i++){
-            for(int j=0; j<columns; j++){
-                int lives = argArray[i][j];
-                if(lives != 0){
-                    double xLoc = colWidth * (j);
-                    double yLoc = colWidth * (i);
-                    Brick nBrick = new Brick(lives, xLoc, yLoc, colWidth);
-                    myBricks.add(nBrick);
-                }
-            }
-        }
-    }
 
     public void dropPowerUp(ImageView power, double time){
         power.setY(power.getY() + 100 * time);

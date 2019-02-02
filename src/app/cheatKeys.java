@@ -9,4 +9,5 @@ public class cheatKeys {
         p.updateLives(1, t);
         System.out.println(p.getLives());
     }
+
 }

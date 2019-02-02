@@ -17,7 +17,7 @@ public class Paddle {
 
     private ImageView myPaddle;
     private int myLives;
-    private int paddle_speed = 20;
+    private int paddle_speed = 40;
     private boolean speedUp = false;
     private boolean lengthUp = false;
 
