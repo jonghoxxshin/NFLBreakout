@@ -1,11 +1,11 @@
 package app;
 
-import javafx.animation.Timeline;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class Paddle {
     public static final String PADDLE_IMAGE = "paddle.png";
@@ -17,11 +17,14 @@ public class Paddle {
 
     private ImageView myPaddle;
     private int myLives;
-    private int paddle_speed = 40;
+    private int paddle_speed = 10;
     private boolean speedUp = false;
     private boolean lengthUp = false;
 
-    private cheatKeys ch = new cheatKeys();
+    private double paddle_velocity = 0;
+    private Set<KeyCode> currentlyPressed = new HashSet<>();
+
+    private CheatKeys ch = new CheatKeys();
 
     double screenWidth, screenHeight;
 
@@ -56,17 +59,23 @@ public class Paddle {
         }
     }
 
-    public int updateLives(int i, Timeline anim){
+    public int updateLives(int i){
         myLives += i;
         if(myLives < 1){
-            //loseAlert(anim);
             return 0;
         }
         return 1;
     }
 
-    public ImageView getPaddle(){
-        return myPaddle;
+    public ImageView getPaddle() { return myPaddle; }
+
+    public ImageView getPaddlePart(int idx) {
+        var dummy = new ImageView();
+        dummy.setX(myPaddle.getX()+idx*myPaddle.getFitWidth()/3);
+        dummy.setFitWidth(myPaddle.getFitWidth()/3);
+        dummy.setY(myPaddle.getY());
+        dummy.setFitHeight(myPaddle.getFitHeight());
+        return dummy;
     }
 
 
@@ -74,12 +83,30 @@ public class Paddle {
         return myLives;
     }
 
-    public void handleKeyInput(KeyCode code, Ball ball){
-        if(code == KeyCode.RIGHT && !(myPaddle.getX() + PADDLE_WIDTH >= screenWidth)){
-            myPaddle.setX(myPaddle.getX() + paddle_speed);
+    private void setVX(double v) { paddle_velocity = v; }
+
+    public void move(double screenWidth) {
+        myPaddle.setX(Math.max(Math.min(myPaddle.getX() + paddle_velocity, screenWidth-myPaddle.getFitWidth()), 0));
+    }
+
+    public void handleKeyReleased(KeyCode code) {
+        currentlyPressed.remove(code);
+        if(currentlyPressed.size() == 0) {
+            setVX(0);
+        } else {
+            if(currentlyPressed.iterator().next() == KeyCode.LEFT) setVX(-paddle_speed);
+            else setVX(paddle_speed);
         }
-        else if(code == KeyCode.LEFT && !(myPaddle.getX() <= 0)){
-            myPaddle.setX(myPaddle.getX() - paddle_speed);
+    }
+
+    public void handleKeyPressed(KeyCode code, Ball ball){
+        if(code == KeyCode.RIGHT){
+            setVX(paddle_speed);
+            currentlyPressed.add(code);
+        }
+        else if(code == KeyCode.LEFT){
+            setVX(-paddle_speed);
+            currentlyPressed.add(code);
         }
         else if(code == KeyCode.L){
             myLives++;
@@ -90,23 +117,14 @@ public class Paddle {
             myPaddle.setY(screenHeight-10);
             ball.resetBall(screenWidth, screenHeight);
         }
+        else if(code == KeyCode.COMMA){
+
+        }
+        else if(code == KeyCode.PERIOD){
+
+        }
+        else if(code == KeyCode.SLASH){
+
+        }
     }
-
-    public void loseAlert(Timeline anim){
-        anim.stop();
-        //https://stackoverflow.com/questions/28937392/javafx-alerts-and-their-size
-        Alert a = new Alert(AlertType.INFORMATION);
-        a.setTitle("YOU LOSE");
-        a.setHeaderText("LOSER");
-        a.setResizable(true);
-        String version = System.getProperty("java.version");
-        String content = String.format("You ran out of lives! You lost!", version);
-        a.setContentText(content);
-        a.show();
-    }
-
-
-
-
-
 }

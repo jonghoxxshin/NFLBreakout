@@ -3,10 +3,10 @@ package app;
 import javafx.animation.Timeline;
 import javafx.scene.input.KeyCode;
 
-public class cheatKeys {
+public class CheatKeys {
 
-    public void addLives(Paddle p, Timeline t){
-        p.updateLives(1, t);
+    public void addLives(Paddle p){
+        p.updateLives(1);
         System.out.println(p.getLives());
     }
 
