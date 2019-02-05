@@ -26,7 +26,7 @@ import javafx.util.Duration;
 public class Breakout extends Application {
 
     public static final String TITLE = "Example JavaFX";
-    public static final int HEIGHT = 728;
+    public static final int HEIGHT = 628;
     public static final int FRAMES_PER_SECOND = 60;
     public static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
     public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
@@ -39,6 +39,7 @@ public class Breakout extends Application {
     private Stage stage;
     private SplashPage splashPage;
     private Game game;
+    private String alertMsg;
     private boolean gamePaused = false;
 
     /**
@@ -70,6 +71,7 @@ public class Breakout extends Application {
             game = new Game();
         } else if (splashState >= 3) {
             game = new TestGame(splashState);
+            alertMsg = ((TestGame) game).getMsg();
         }
 
         if (splashState == 1 || splashState >= 3) {
@@ -81,27 +83,30 @@ public class Breakout extends Application {
         if(game != null && !gamePaused) {
             int res = game.step(elapsedTime);
             if(res == -1) { // lost
-                alerter(1);
-                stage.setScene(splashPage.getSplashScene());
-                splashPage.setSplash(0);
-                game = null;
+                alerter(1, "You ran out of lives! You lost!");
+                resetGame();
             } else if(res == 1) { // won
-                alerter(0);
+                alerter(0, "You broke all the bricks! You beat the level!");
                 // game.nextLevel();
+                resetGame();
             } else if(res == 2){
                 //test success
-                alerter(2);
+                alerter(2, alertMsg);
+                resetGame();
             }else if(res ==3){
                 //test failed
             }
         }
     }
 
+    public void resetGame(){
+        stage.setScene(splashPage.getSplashScene());
+        splashPage.setSplash(0);
+        game = null;
+    }
 
 
-
-
-    public void alerter(int i){ //0 if win, 1 if lose, 2 if test
+    public void alerter(int i, String msg){ //0 if win, 1 if lose, 2 if test
         gamePaused = true;
         //https://stackoverflow.com/questions/28937392/javafx-alerts-and-their-size
         Alert a = new Alert(Alert.AlertType.INFORMATION);
@@ -111,19 +116,19 @@ public class Breakout extends Application {
         if( i == 0){
             title = "You win";
             header = "Winner";
-            con = "You broke all the bricks! You beat the level!";
+            con = msg;
         }
         else if(i == 1) {
             title = "You lose";
             header = "Loser";
-            con = "You ran out of lives! You lost!";
+            con = msg;
 
 
         }
         else if (i == 2){
             title = "Test result";
             header = "Success";
-            con = "The test was successful!";
+            con = alertMsg;
 
         }
         a.setTitle(title);
