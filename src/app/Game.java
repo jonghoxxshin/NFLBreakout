@@ -131,7 +131,6 @@ public class Game {
 
             if (!myBall.firstBounce) {
                 myBall.firstBounce = true;
-                System.out.println("made it here");
             }
         }
 
