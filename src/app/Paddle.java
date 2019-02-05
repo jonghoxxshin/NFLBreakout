@@ -6,10 +6,11 @@ import javafx.scene.input.KeyCode;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Paddle {
     public static final String PADDLE_IMAGE = "paddle.png";
-
     public static final long PADDLE_WIDTH = 80;
     public static final long PADDLE_HEIGHT = 10;
     public static final long PADDLE_LONG_WIDTH = 150;
@@ -17,8 +18,9 @@ public class Paddle {
 
     private ImageView myPaddle;
     private int myLives;
-    private int paddle_speed = 10;
-    private boolean speedUp = false;
+    private double paddle_speed = 10;
+    private double paddleWidth = 80;
+    //private boolean speedUp = false;
     private boolean lengthUp = false;
 
     private double paddle_velocity = 0;
@@ -31,38 +33,24 @@ public class Paddle {
     public Paddle(double screenWidth, double screenHeight){
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
-
         Breakout b = new Breakout();
         Image image = new Image(this.getClass().getClassLoader().getResourceAsStream(PADDLE_IMAGE));
         myPaddle = new ImageView(image);
         myLives = 4;
         myPaddle.setX(screenWidth/2);
         myPaddle.setY(screenHeight-10);
+        myPaddle.setFitWidth(paddleWidth);
         myPaddle.setFitHeight(PADDLE_HEIGHT);
-        myPaddle.setFitWidth(PADDLE_WIDTH);
-    }
-
-    public void speedPowerUp(){
-        if(this.speedUp){
-            this.paddle_speed = 20;
-        }
-        else{
-            this.paddle_speed = 10;
-        }
-    }
-    public void lengthPowerUp(){
-        if(this.lengthUp){
-            this.myPaddle.setFitWidth(PADDLE_LONG_WIDTH);
-        }
-        else{
-            this.myPaddle.setFitWidth(PADDLE_WIDTH);
-        }
+        //setPaddle(paddle_speed, paddleWidth);
     }
 
     public int updateLives(int i){
         myLives += i;
         if(myLives < 1){
             return 0;
+        }
+        if(i<0){
+            setPaddle(10, 80);
         }
         return 1;
     }
@@ -110,7 +98,6 @@ public class Paddle {
         }
         else if(code == KeyCode.L){
             myLives++;
-            //System.out.println(myLives);
         }
         else if(code == KeyCode.R){
             myPaddle.setX(screenWidth/2);
@@ -126,5 +113,44 @@ public class Paddle {
         else if(code == KeyCode.SLASH){
 
         }
+    }
+
+    public void speedUp(){
+        //paddle_speed = 15;
+        setPaddle(15, paddleWidth);
+        timeOut("speed");
+    }
+
+    public void stretch(){
+        //myPaddle.setFitWidth(150);
+        //paddleWidth = 150;
+        setPaddle(paddle_speed, 150);
+        timeOut("stretch");
+    }
+
+    public void timeOut(String powType){
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                if(powType.equals("stretch")){
+                    //myPaddle.setFitWidth(80);
+                    //paddleWidth = 80;
+                    setPaddle(paddle_speed, 80);
+                }
+                else{
+                    //paddle_speed = 10;
+                    setPaddle(10, paddleWidth);
+                }
+            }
+        };
+        timer.schedule(task, 5000l);
+    }
+
+    public void setPaddle(double speed, double width){
+        myPaddle.setFitWidth(width);
+        paddle_speed = speed;
+        paddleWidth = width;
+        myPaddle.setFitHeight(PADDLE_HEIGHT);
     }
 }

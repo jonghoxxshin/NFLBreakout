@@ -2,6 +2,8 @@ package app;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Ball {
     public static final int BALL_SPEED = 100;
@@ -12,7 +14,7 @@ public class Ball {
     private int myVeloX = 0;
     private int myVeloY = -2;
     //0 = normal ball; 1 = powerUp big ball (breaks any brick in one hit)
-    private int myBallStatus = 0;
+    private int myStatus = 0;
     private double mySize;
 
     public Ball(double xPos, double yPos){
@@ -20,9 +22,7 @@ public class Ball {
         myBall = new ImageView(image);
         myBall.setX(xPos);
         myBall.setY(yPos);
-        mySize = 20;
-        myBall.setFitWidth(mySize);
-        myBall.setFitHeight(mySize);
+        setBall(0, 20);
         firstBounce = false;
     }
 
@@ -61,6 +61,7 @@ public class Ball {
         myBall.setY(screenHeight-300);
         myVeloX = 0;
         myVeloY = Math.abs(myVeloY);
+        setBall(0, 20);
         firstBounce = false;
     }
 
@@ -68,11 +69,36 @@ public class Ball {
 
     public int getYVelo(){return myVeloY;}
 
-    public ImageView getBall(){
-        return myBall;
-    }
+    public ImageView getBall(){ return myBall; }
 
     public void setVeloX(int i){this.myVeloX = i;}
 
     public void setVeloY(int i){this.myVeloY = i;}
+
+    public int getMyStatus(){ return myStatus; }
+
+    public void pumpPower() {
+        if (myStatus != 1) {
+            setBall(1, 30);
+        }
+        timeOut("bigBall");
+    }
+
+    public void setBall(int status, double size){
+        myStatus = status;
+        myBall.setFitWidth(size);
+        myBall.setFitHeight(size);
+        mySize = size;
+    }
+
+    public void timeOut(String powType){
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                setBall(0, 20);
+            }
+        };
+        timer.schedule(task, 5010l);
+    }
 }

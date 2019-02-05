@@ -140,17 +140,21 @@ public class Game {
         for (Brick b : myBricks) {
             if (myCollisionHandler.detectCollision(myBall.getBall(), b.getBrick())) {
                 myScore++;
-                System.out.println(b.getHasPower());
-                if (myCollisionHandler.sideCollision(myBall.getBall(), b.getBrick())) {
-                    myBall.updateVeloBrick(-1, 1);
-                } else {
-                    myBall.updateVeloBrick(1, -1);
+                if(myBall.getMyStatus() == 0){
+                    if (myCollisionHandler.sideCollision(myBall.getBall(), b.getBrick())) {
+                        myBall.updateVeloBrick(-1, 1);
+                    } else {
+                        myBall.updateVeloBrick(1, -1);
+                    }
+                    bricksLeft -= b.updateBrick(1);
                 }
-                bricksLeft -= b.updateBrick(1);
+                else{
+                    bricksLeft -= b.updateBrick(3);
+                }
                 if (bricksLeft == 0) {
                     return 1;
                 }
-                else if (b.getLives() == 0 && b.getHasPower()) {
+                if (b.getLives() == 0 && b.getHasPower()) {
                     myPowersNew.add(b.getPower());
                 }
             }
@@ -158,7 +162,7 @@ public class Game {
 
         for(powerUp p: myPowersNew){
             p.dropPower(elapsedTime);
-            myScore += p.catchPower(myPaddle);
+            myScore += p.catchPower(myPaddle, myBall);
             //catchPower(p);
         }
 
