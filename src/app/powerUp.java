@@ -3,22 +3,29 @@ package app;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+import java.util.Random;
+
 public class powerUp {
     private static final String[] ALL_POWERUPS = {"air_pump_powerup.png", "challenge_powerup.png", "gatorade_powerup.png", "stretcher_powerup.png"};
-    private static final int POWER_SPEED = 100;
+    private static final int POWER_SPEED = 200;
 
     private int myType;
-    private int myPosX;
-    private int myPosY;
-    private int mySize;
+    private double myPosX;
+    private double myPosY;
+    private double mySize;
     private ImageView myPower;
+    private boolean Live;
 
-    public powerUp(int type, int x, int y, int size){
+    public powerUp(int type, double x, double y, double size){
+        //Random rand = new Random(3);
+        //int dex = rand.nextInt(4);
+        //myType = dex;
         myType = type;
         myPosX = x;
         myPosY = y;
         mySize = size;
         myPower = setMyPower();
+        Live = true;
     }
 
     public ImageView setMyPower(){
@@ -32,16 +39,17 @@ public class powerUp {
         return temp;
     }
 
-    //Bricks have powerUp variable, if break breaks --> if brick.hasPowerUp --> brick.powerUp.dropPower()
-    public void dropPower(double time){
-        if(myPower.visibleProperty().getValue() == false){
-            myPower.setVisible(true);
-        }
-        myPower.setY(myPower.getY() + 100*time);
+    public ImageView getPowerImg(){
+        return this.myPower;
     }
 
-    //If brick has powerup add it to scene brick.hasPowerUp --> brick.powerUp.setMyPowerUP() add to root/group
+    //Bricks have powerUp variable, if break breaks --> if brick.hasPowerUp --> brick.powerUp.dropPower()
+    public void dropPower(double time){
+        if(myPower.visibleProperty().getValue() == false && Live == true){
+            this.myPower.setVisible(true);
+        }
+        this.myPower.setY(myPower.getY() + POWER_SPEED*time);
+    }
 
-
-
+    public void killPower(){Live = false;}
 }

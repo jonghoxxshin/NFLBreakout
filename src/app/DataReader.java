@@ -1,13 +1,16 @@
 package app;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class DataReader {
     private String[] levelFiles = {"level1_setup.txt", "level2_setup.txt", "level3_setup.txt"};
+    private String[] testFiles = {"test_1.txt", "test_2.txt", "test_3.txt"};
     private double width,height;
 
     public ArrayList<Brick> myBricks;
+    public ArrayList<String> testInfo;
 
     public DataReader(double _width, double _height){
         this.width = _width;
@@ -56,6 +59,18 @@ public class DataReader {
                 }
             }
         }
+    }
+
+    public ArrayList<String> readTestFiles(int testNum){
+        testInfo = new ArrayList<>();
+        String testFile = testFiles[testNum-3];
+        Scanner scan = new Scanner(this.getClass().getClassLoader().getResourceAsStream(testFile));
+        while(scan.hasNext()){
+            String temp = scan.nextLine();
+            testInfo.add(temp);
+        }
+        //System.out.println(testInfo);
+        return testInfo;
     }
 
     public ArrayList<Brick> getMyBricks(){
