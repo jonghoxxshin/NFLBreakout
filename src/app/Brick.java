@@ -76,7 +76,7 @@ public class Brick {
     public boolean powerBool(){
         Random rand = new Random();
         int powerInt = rand.nextInt(11);
-        return (powerInt <= 2);
+        return (powerInt <= 10);
     }
 
     public void setPosition(ImageView pic, double xPos, double yPos, double size){
