@@ -146,7 +146,6 @@ public class Game {
                 } else {
                     myBall.updateVeloBrick(1, -1);
                 }
-                //myBall.updateVeloBrick(-1, -1);
                 bricksLeft -= b.updateBrick(1);
                 if (bricksLeft == 0) {
                     return 1;
@@ -158,36 +157,13 @@ public class Game {
         }
 
         for(powerUp p: myPowersNew){
-            //System.out.println("DROP POWER");
             p.dropPower(elapsedTime);
-            catchPower(p);
+            myScore += p.catchPower(myPaddle);
+            //catchPower(p);
         }
 
-        /*
-        for (ImageView p : myPowers) {
-            dropPowerUp(p, elapsedTime);
-        }
-        */
-
-        //change direction in x-axis when hits a wall
         myBall.wallBounce(WIDTH, HEIGHT);
 
         return 0;
-    }
-
-
-    public void catchPower(powerUp power) {
-        //power.setY(power.getY() + 100 * time);
-        if (myCollisionHandler.detectCollision(power.getPowerImg(), myPaddle.getPaddle())) {
-            myScore++;
-            power.getPowerImg().setVisible(false);
-            power.killPower();
-            myPaddle.updateLives(1);
-            System.out.println(myPaddle.getLives());
-        }
-        if (power.getPowerImg().getY() >= HEIGHT) {
-            power.getPowerImg().setVisible(false);
-            power.killPower();
-        }
     }
 }
