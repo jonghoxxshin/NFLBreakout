@@ -33,12 +33,13 @@ public class Game {
     // some things we need to remember during our game
     protected Ball myBall; //= new app.Ball(myScene.getWidth()/2, myScene.getHeight()/2);
     protected Paddle myPaddle;
-    protected ArrayList<Brick> myBricks;
     protected int numBricks;
+    protected ArrayList<Brick> myBricks;
     private int myLevel;
-    private int bricksLeft;
+    protected int bricksLeft;
     private ArrayList<ImageView> myPowers;
-    private CheatKeys ch = new CheatKeys();
+    private ArrayList<powerUp> myPowersNew;
+    //private CheatKeys ch = new CheatKeys();
     private int myScore;
 
     //private Group root;
@@ -56,14 +57,15 @@ public class Game {
         Image bkg = new Image("Half.png");
 
         double width = bkg.getWidth();
-        double height = bkg.getHeight();
+        double height = bkg.getHeight() - 100;
         var scene = new Scene(root, width, height, BACKGROUND);
 
         ImageView mv = new ImageView(bkg);
-        myBall = new Ball(scene.getWidth() / 2, scene.getHeight() - 300);
+        myBall = new Ball(scene.getWidth() / 2, scene.getHeight() - 100);
         myPaddle = new Paddle(width, height);
         myLevel = 1;
         myPowers = new ArrayList<>();
+        myPowersNew = new ArrayList<>();
         //Read in level set up and brick location
 
         myDataReader = new DataReader(width, height);
@@ -90,8 +92,8 @@ public class Game {
 
         for (Brick b : myBricks) {
             root.getChildren().add(b.getBrick());
-            if (b.getPowerUp() != null) {
-                root.getChildren().add(b.getPowerUp());
+            if (b.getHasPower()) {
+                root.getChildren().add(b.getPower().getPowerImg());
             }
         }
 
@@ -110,7 +112,7 @@ public class Game {
         myBall.move(elapsedTime);
         myPaddle.move(WIDTH);
 
-        display.setText("Lives remaining : " + Integer.toString(myPaddle.getLives()) + "\n Level: " + myLevel + "\n Score: " + myScore);
+        display.setText("Lives remaining : " + myPaddle.getLives() + "\n Level: " + myLevel + "\n Score: " + myScore);
 
         if (myCollisionHandler.getBottom(myBall.getBall()) >= HEIGHT) {
             if (myPaddle.updateLives(-1) == 0) {
@@ -138,44 +140,30 @@ public class Game {
         for (Brick b : myBricks) {
             if (myCollisionHandler.detectCollision(myBall.getBall(), b.getBrick())) {
                 myScore++;
+                System.out.println(b.getHasPower());
                 if (myCollisionHandler.sideCollision(myBall.getBall(), b.getBrick())) {
                     myBall.updateVeloBrick(-1, 1);
                 } else {
                     myBall.updateVeloBrick(1, -1);
                 }
-                //myBall.updateVeloBrick(-1, -1);
                 bricksLeft -= b.updateBrick(1);
                 if (bricksLeft == 0) {
                     return 1;
                 }
-                if (b.getLives() == 0 && b.getPowerUp() != null) {
-                    //System.out.println("HERE");
-                    myPowers.add(b.showPowerUp());
+                else if (b.getLives() == 0 && b.getHasPower()) {
+                    myPowersNew.add(b.getPower());
                 }
             }
         }
 
-        for (ImageView p : myPowers) {
-            dropPowerUp(p, elapsedTime);
+        for(powerUp p: myPowersNew){
+            p.dropPower(elapsedTime);
+            myScore += p.catchPower(myPaddle);
+            //catchPower(p);
         }
 
-        //change direction in x-axis when hits a wall
         myBall.wallBounce(WIDTH, HEIGHT);
 
         return 0;
-    }
-
-
-    public void dropPowerUp(ImageView power, double time) {
-        power.setY(power.getY() + 100 * time);
-        if (myCollisionHandler.detectCollision(power, myPaddle.getPaddle())) {
-            myScore++;
-            power.setVisible(false);
-            myPaddle.updateLives(1);
-            System.out.println(myPaddle.getLives());
-        }
-        if (power.getY() >= HEIGHT) {
-            power.setVisible(false);
-        }
     }
 }

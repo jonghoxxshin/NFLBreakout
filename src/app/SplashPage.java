@@ -41,7 +41,7 @@ public class SplashPage{
         Image nfl = new Image("nfl.png");
         ImageView mvNfl = new ImageView(nfl);
 
-        var scene = new Scene(root, bkg.getWidth(), bkg.getHeight(), background);
+        var scene = new Scene(root, bkg.getWidth(), bkg.getHeight() - 100, background);
 
         //title
         title = new Text(scene.getWidth()* 0.27, scene.getHeight() * 0.49, "NFL Break-Out!\n");

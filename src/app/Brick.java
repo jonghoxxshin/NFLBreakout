@@ -23,23 +23,23 @@ public class Brick {
     private double myPosX;
     private double myPosY;
     private boolean hasPowerUp;
-    private ImageView myPowerUp;
     private double mySize;
+    private powerUp myPower;
 
 
     public Brick(int lives, double posX, double posY, double size){
         myLives = lives;
         myPosX = posX;
         myPosY = posY;
-        hasPowerUp = false;
         mySize = size;
         myHelmet = new ImageView(setHelmet(lives));
         setPosition(myHelmet, myPosX, myPosY, size);
         //https://stackoverflow.com/questions/2444019/how-do-i-generate-a-random-integer-between-min-and-max-in-java
         //Randomly decide whether brick is to have a powerUp and if it does, randomly assign said powerUp
-        myPowerUp = new ImageView(setPowerUp());
-        myPowerUp.setVisible(false);
-        setPosition(myPowerUp, myPosX, myPosY, size/2);
+        hasPowerUp = powerBool();
+        if(hasPowerUp){
+            myPower = new powerUp(1, myPosX, myPosY, mySize/2);
+        } else{ myPower = null; }
     }
 
     public int updateBrick(int damage){
@@ -73,21 +73,10 @@ public class Brick {
         return image;
     }
 
-
-    public Image setPowerUp(){
-        String[] allPowerUps = {"air_pump_powerup.png", "challenge_powerup.png", "gatorade_powerup.png", "stretcher_powerup.png"};
+    public boolean powerBool(){
         Random rand = new Random();
         int powerInt = rand.nextInt(11);
-        if(powerInt < 2){
-            this.hasPowerUp = true;
-        }
-        if(hasPowerUp){
-            //int dex = rand.nextInt(4);
-            int dex = 1;
-            Image image = new Image(this.getClass().getClassLoader().getResourceAsStream(allPowerUps[dex]));
-            return image;
-        }
-        return null;
+        return (powerInt <= 2);
     }
 
     public void setPosition(ImageView pic, double xPos, double yPos, double size){
@@ -97,31 +86,14 @@ public class Brick {
         pic.setFitWidth(size);
     }
 
-    public double getX(){
-        return myPosX;
-    }
-    public double getY(){
-        return myPosY;
-    }
+    public double getX(){ return myPosX; }
+    public double getY(){ return myPosY; }
 
-    public ImageView getBrick(){
-        return myHelmet;
-    }
+    public ImageView getBrick(){ return myHelmet; }
 
-    public int getLives(){
-        return myLives;
-    }
+    public int getLives(){ return myLives; }
 
-    public ImageView getPowerUp(){
-        if(hasPowerUp){
-            return myPowerUp;
-        }
-        return null;
-    }
+    public boolean getHasPower(){ return hasPowerUp; }
 
-    public ImageView showPowerUp(){
-        myPowerUp.setX(myPowerUp.getX() + 20);
-        myPowerUp.setVisible(true);
-        return myPowerUp;
-    }
+    public powerUp getPower(){ return this.myPower; }
 }
