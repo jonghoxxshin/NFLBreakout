@@ -147,7 +147,7 @@ public class Game {
             }
         }
 
-
+        //Check for collisions of each brick in scene (all in myBricks)
         for (Brick b : myBricks) {
             if (myCollisionHandler.detectCollision(myBall.getBall(), b.getBrick())) {
                 myScore++;
@@ -174,6 +174,7 @@ public class Game {
             }
         }
 
+        //If a powerUp was added to myPowersNew (brick with powerUp broke--> drop said powerUp)
         for(powerUp p: myPowersNew){
             p.dropPower(elapsedTime);
             myScore += p.catchPower(myPaddle, myBall);
@@ -184,4 +185,6 @@ public class Game {
 
         return 0;
     }
+
+
 }

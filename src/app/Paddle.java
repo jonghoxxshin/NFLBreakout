@@ -112,6 +112,11 @@ public class Paddle {
         }
     }
 
+    /**
+     * handles key inputs to move paddle and handle cheatKeys
+     * @param code
+     * @param ball
+     */
     public void handleKeyPressed(KeyCode code, Ball ball){
         if(code == KeyCode.RIGHT){
             setVX(paddle_speed);
@@ -128,6 +133,15 @@ public class Paddle {
             myPaddle.setX(screenWidth/2);
             myPaddle.setY(screenHeight-10);
             ball.resetBall(screenWidth, screenHeight);
+        }
+        else if(code == KeyCode.S){
+            stretch();
+        }
+        else if(code == KeyCode.F){
+            speedUp();
+        }
+        else if(code == KeyCode.B){
+            ball.pumpPower();
         }
         else if(code == KeyCode.COMMA){
 
