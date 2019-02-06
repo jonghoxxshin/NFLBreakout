@@ -44,6 +44,12 @@ public class Paddle {
         //setPaddle(paddle_speed, paddleWidth);
     }
 
+    /**
+     * Called when ball hits bottom of screen (lose life) or when paddle catches extra life powerUp
+     * Returns 0 when lose game (lives = 0)
+     * @param i
+     * @return
+     */
     public int updateLives(int i){
         myLives += i;
         if(myLives < 1){
@@ -58,8 +64,17 @@ public class Paddle {
         return 1;
     }
 
+    /**
+     * Getter returns ImageView of paddle
+     * @return
+     */
     public ImageView getPaddle() { return myPaddle; }
 
+    /**
+     * Used to vary the bounce of ball upon paddle collision depending on location that the ball hits the paddle
+     * @param idx
+     * @return
+     */
     public ImageView getPaddlePart(int idx) {
         var dummy = new ImageView();
         dummy.setX(myPaddle.getX()+idx*myPaddle.getFitWidth()/3);
@@ -69,11 +84,18 @@ public class Paddle {
         return dummy;
     }
 
-
+    /**
+     * Getter returns number of lives user (paddle) has left
+     * @return
+     */
     public int getLives(){
         return myLives;
     }
 
+    /**
+     * Set velocity of paddle
+     * @param v
+     */
     private void setVX(double v) { paddle_velocity = v; }
 
     public void move(double screenWidth) {
@@ -118,12 +140,18 @@ public class Paddle {
         }
     }
 
+    /**
+     * Handles "gatorade" powerUp -> increases paddle speed by 1.5 for 5 seconds
+     */
     public void speedUp(){
         //paddle_speed = 15;
         setPaddle(15, paddleWidth);
         timeOut("speed");
     }
 
+    /**
+     * Handles "stretcher" powerUp -> increases paddle size to 150px for 5 seconds
+     */
     public void stretch(){
         //myPaddle.setFitWidth(150);
         //paddleWidth = 150;
@@ -131,6 +159,10 @@ public class Paddle {
         timeOut("stretch");
     }
 
+    /**
+     * Called by speedUp() and stretch() to reset paddle after 5 second delay
+     * @param powType
+     */
     //https://stackoverflow.com/questions/35512648/adding-a-timer-to-my-program-javafx
     public void timeOut(String powType){
         Timer timer = new Timer();
@@ -151,6 +183,12 @@ public class Paddle {
         timer.schedule(task, 5000l);
     }
 
+    /**
+     * Helper method sets paddle speed and width based on given parameters
+     * Called in constructor, speedUp, stretch, timeOut
+     * @param speed
+     * @param width
+     */
     public void setPaddle(double speed, double width){
         myPaddle.setFitWidth(width);
         paddle_speed = speed;

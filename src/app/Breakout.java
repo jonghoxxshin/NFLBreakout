@@ -4,12 +4,15 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+
+import java.util.Optional;
 
 
 /**
@@ -32,6 +35,7 @@ public class Breakout extends Application {
     public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
     public static final Paint BACKGROUND = Color.LIGHTGREEN;
     public static final Image FIELD = new Image("Half.png");
+
     public static final ImageView BKG_VIEW = new ImageView(FIELD);
     private static final double WIDTH = 684;
 
@@ -67,8 +71,9 @@ public class Breakout extends Application {
     // Note, there are more sophisticated ways to animate shapes, but these simple ways work fine to start.
     private void step (double elapsedTime) {
         int splashState = splashPage.getSplash();
-        if (splashState == 1) {
-            game = new Game();
+        //If game != null --> means level was beaten and increment to next level
+        if (splashState == 1 && game == null) {
+            game = new Game(1);
         } else if (splashState >= 3) {
             game = new TestGame(splashState);
             alertMsg = ((TestGame) game).getMsg();
@@ -83,18 +88,16 @@ public class Breakout extends Application {
         if(game != null && !gamePaused) {
             int res = game.step(elapsedTime);
             if(res == -1) { // lost
-                alerter(1, "You ran out of lives! You lost!");
-                resetGame();
+                alerter(1, "You ran out of lives! You lost and are out of the playoffs!");
             } else if(res == 1) { // won
-                alerter(0, "You broke all the bricks! You beat the level!");
-                // game.nextLevel();
-                game.myLevel++;
-
-                //resetGame();
+                if(game.myLevel <= 2){
+                    alerter(0, "You broke all the bricks! Onto the next round!");
+                }
+                else{ alerter(0, "You beat the final level! SUPER BOWL CHAMPS!"); }
+                //alerter(0, "You broke all the bricks! You beat the level!");
             } else if(res == 2){
                 //test success
                 alerter(2, alertMsg);
-                resetGame();
             }else if(res ==3){
                 //test failed
             }
@@ -124,14 +127,11 @@ public class Breakout extends Application {
             title = "You lose";
             header = "Loser";
             con = msg;
-
-
         }
         else if (i == 2){
             title = "Test result";
             header = "Success";
             con = alertMsg;
-
         }
         a.setTitle(title);
         a.setHeaderText(header);
@@ -139,11 +139,27 @@ public class Breakout extends Application {
         String version = System.getProperty("java.version");
         String content = String.format(con, version);
         a.setContentText(content);
+        a.setOnHidden(evt -> handleAlert(i));
         a.show();
     }
 
-
-
+    //https://stackoverflow.com/questions/44742134/animationtimer-showandwait-is-not-allowed-during-animation-processing
+    public void handleAlert(int res){
+        if(res == 1 || res == 2){
+            resetGame();
+        }
+        else{
+            game.myLevel++;
+            if(game.myLevel > 3){
+                resetGame();
+            }
+            else{
+                splashPage.setSplash(1);
+            }
+            //System.out.println(game.myLevel);
+            //start(this.stage);
+        }
+    }
 
     /**
      * Start the program.

@@ -2,6 +2,7 @@ package app;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class DataReader {
@@ -9,19 +10,34 @@ public class DataReader {
     private String[] testFiles = {"test_1.txt", "test_2.txt", "test_3.txt"};
     private double width,height;
 
-    public ArrayList<Brick> myBricks;
-    public ArrayList<String> testInfo;
+    //public ArrayList<Brick> myBricks;
+    public List<Brick> myBricks;
+    //public ArrayList<String> testInfo;
+    public List<String> testInfo;
 
+    /**
+     * Constructor takes in scene's height and width
+     * @param _width
+     * @param _height
+     */
     public DataReader(double _width, double _height){
         this.width = _width;
         this.height = _height;
     }
 
+
+    /**
+     * Reads text file based on level input from Game.java (1-3)
+     * fills 2D array with values from text file -- indicating brick lives and positions
+     * Uses toIntArray helper method because originally comes in as strings
+     * @param myLevel
+     */
     public void readBricks(int myLevel){
         myBricks = new ArrayList<>();
         int line = 0;
         String level = levelFiles[myLevel-1];
         Scanner scan = new Scanner(this.getClass().getClassLoader().getResourceAsStream(level));
+        //First line contains info regarding level configuration
         int[] firstLine = toIntArray(scan.nextLine().split(" "));
 
         //int brickSize = firstLine[0];
@@ -29,6 +45,7 @@ public class DataReader {
         int columns = firstLine[2];
         int[][] brickLocationArray = new int[rows][columns];
 
+        //Fill brickLocationArray with arrays of data (numbers representing brick lives)
         while(scan.hasNext()){
             int[] intData = toIntArray(scan.nextLine().split(" "));
             brickLocationArray[line] = intData;
@@ -37,6 +54,11 @@ public class DataReader {
         parse2D(brickLocationArray, rows, columns);
     }
 
+    /**
+     * Helper method returns arrays of integers given arrays of strings
+     * @param args
+     * @return
+     */
     public int[] toIntArray(String[] args){
         int length = args.length;
         int[] intArray = new int[length];
@@ -46,6 +68,12 @@ public class DataReader {
         return intArray;
     }
 
+    /**
+     * Actually creates bricks and sets brick locations based on number of columns and width of scene
+     * @param argArray
+     * @param rows
+     * @param columns
+     */
     public void parse2D(int[][] argArray, int rows, int columns){
         double colWidth = width/columns;
         for(int i=0; i<rows; i++){
@@ -61,7 +89,13 @@ public class DataReader {
         }
     }
 
-    public ArrayList<String> readTestFiles(int testNum){
+    /**
+     * Called in TestGame.java when the game is running in test mode
+     * Based on test mode input -> reads different test files and sets correct ball/paddle starting position and velocity
+     * @param testNum
+     * @return
+     */
+    public List<String> readTestFiles(int testNum){
         testInfo = new ArrayList<>();
         String testFile = testFiles[testNum-3];
         Scanner scan = new Scanner(this.getClass().getClassLoader().getResourceAsStream(testFile));
@@ -70,10 +104,16 @@ public class DataReader {
             testInfo.add(temp);
         }
         //System.out.println(testInfo);
+        //return testInfo;
         return testInfo;
     }
 
-    public ArrayList<Brick> getMyBricks(){
+    /**
+     * Getter function returns bricks that were read in from data file
+     * @return
+     */
+    /*public ArrayList<Brick> getMyBricks(){
         return myBricks;
-    }
+    }*/
+    public List<Brick> getMyBricks() {return myBricks;}
 }
