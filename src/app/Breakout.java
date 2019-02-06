@@ -88,7 +88,9 @@ public class Breakout extends Application {
             } else if(res == 1) { // won
                 alerter(0, "You broke all the bricks! You beat the level!");
                 // game.nextLevel();
-                resetGame();
+                game.myLevel++;
+
+                //resetGame();
             } else if(res == 2){
                 //test success
                 alerter(2, alertMsg);

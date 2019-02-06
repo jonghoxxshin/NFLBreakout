@@ -50,6 +50,9 @@ public class Paddle {
             return 0;
         }
         if(i<0){
+            //paddle_speed = 10;
+            //paddleWidth = 80;
+            //myPaddle.setFitWidth(80);
             setPaddle(10, 80);
         }
         return 1;
@@ -128,6 +131,7 @@ public class Paddle {
         timeOut("stretch");
     }
 
+    //https://stackoverflow.com/questions/35512648/adding-a-timer-to-my-program-javafx
     public void timeOut(String powType){
         Timer timer = new Timer();
         TimerTask task = new TimerTask() {
