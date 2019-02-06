@@ -35,7 +35,7 @@ public class Game {
     protected Paddle myPaddle;
     protected int numBricks;
     protected ArrayList<Brick> myBricks;
-    private int myLevel;
+    protected int myLevel = 2;
     protected int bricksLeft;
     private ArrayList<ImageView> myPowers;
     private ArrayList<powerUp> myPowersNew;
@@ -63,7 +63,7 @@ public class Game {
         ImageView mv = new ImageView(bkg);
         myBall = new Ball(scene.getWidth() / 2, scene.getHeight() - 100);
         myPaddle = new Paddle(width, height);
-        myLevel = 1;
+        //myLevel = 1;
         myPowers = new ArrayList<>();
         myPowersNew = new ArrayList<>();
         //Read in level set up and brick location
@@ -91,7 +91,11 @@ public class Game {
 
 
         for (Brick b : myBricks) {
-            root.getChildren().add(b.getBrick());
+            var tempArray = b.getMyHelmets();
+            for(ImageView h:tempArray){
+                root.getChildren().add(h);
+            }
+            //root.getChildren().add(b.getBrick());
             if (b.getHasPower()) {
                 root.getChildren().add(b.getPower().getPowerImg());
             }
@@ -146,10 +150,12 @@ public class Game {
                     } else {
                         myBall.updateVeloBrick(1, -1);
                     }
-                    bricksLeft -= b.updateBrick(1);
+                    bricksLeft -= b.updateBrick(1, b.getLives());
+                    //System.out.println(bricksLeft);
                 }
                 else{
-                    bricksLeft -= b.updateBrick(3);
+                    bricksLeft -= b.updateBrick(3, b.getLives());
+                    //System.out.println(bricksLeft);
                 }
                 if (bricksLeft == 0) {
                     return 1;

@@ -79,6 +79,10 @@ public class Ball {
 
     public void pumpPower() {
         if (myStatus != 1) {
+            //myStatus = 1;
+            //myBall.setFitWidth(30);
+            //myBall.setFitHeight(30);
+            //mySize = 30;
             setBall(1, 30);
         }
         timeOut("bigBall");
@@ -91,11 +95,16 @@ public class Ball {
         mySize = size;
     }
 
+    //https://stackoverflow.com/questions/35512648/adding-a-timer-to-my-program-javafx
     public void timeOut(String powType){
         Timer timer = new Timer();
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
+                //myStatus = 0;
+                //myBall.setFitWidth(20);
+                //myBall.setFitHeight(20);
+                //mySize = 20;
                 setBall(0, 20);
             }
         };
