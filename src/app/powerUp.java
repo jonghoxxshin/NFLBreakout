@@ -34,7 +34,7 @@ public class powerUp {
     public ImageView setMyPower(){
         Image image = new Image(this.getClass().getClassLoader().getResourceAsStream(ALL_POWERUPS[myType]));
         var temp = new ImageView(image);
-        temp.setX(myPosX);
+        temp.setX(myPosX + 10);
         temp.setY(myPosY);
         temp.setFitWidth(mySize);
         temp.setFitHeight(mySize);

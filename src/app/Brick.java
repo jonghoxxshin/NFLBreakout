@@ -17,23 +17,31 @@ import javafx.util.Duration;
 import java.util.*;
 
 public class Brick {
+    //private final static String[] ALL_HELMETS = {"redskins_helmet.png", "giants_helmet.png", "eagles_helmet.png"};
+    private final static String[] ALL_HELMETS = {"redskins_rect_crop.JPG", "giants_rect_crop.JPG", "eagles_rect_crop.JPG"};
 
     private int myLives;
-    private ImageView myHelmet;
+    //private ImageView myHelmet;
     private double myPosX;
     private double myPosY;
     private boolean hasPowerUp;
     private double mySize;
     private powerUp myPower;
+    private ArrayList<ImageView> myHelmets;
 
 
     public Brick(int lives, double posX, double posY, double size){
+        myHelmets = new ArrayList<>();
         myLives = lives;
         myPosX = posX;
         myPosY = posY;
         mySize = size;
-        myHelmet = new ImageView(setHelmet(lives));
-        setPosition(myHelmet, myPosX, myPosY, size);
+
+        setHelmet(lives);
+        for(ImageView h:myHelmets){
+            setPosition(h, myPosX, myPosY, mySize);
+        }
+
         //https://stackoverflow.com/questions/2444019/how-do-i-generate-a-random-integer-between-min-and-max-in-java
         //Randomly decide whether brick is to have a powerUp and if it does, randomly assign said powerUp
         hasPowerUp = powerBool();
@@ -42,41 +50,31 @@ public class Brick {
         } else{ myPower = null; }
     }
 
-    public int updateBrick(int damage){
-        this.myLives -= damage;
-        if(myLives <= 0){
-            this.myHelmet.setVisible(false);
+    public int updateBrick(int damage, int lives){
+        this.myLives = lives - damage;
+        if(lives - damage <= 0){
+            for(ImageView h:myHelmets){
+                h.setVisible(false);
+            }
             return 1;
         }
         else{
-            //System.out.println("HERE, SHOULD CHANGE PIC");
-            this.myHelmet = new ImageView(setHelmet(myLives));
+            myHelmets.get(lives-1).setVisible(false);
+            myHelmets.get(lives-2).setVisible(true);
             return 0;
         }
     }
 
-    public Image setHelmet(int lives){
-        String res;
-        if(lives == 3){
-            res = "eagles_helmet.png";
+    public void setHelmet(int lives){
+        for(int i=0; i<lives; i++){
+            myHelmets.add(loadHelmets(i));
         }
-        else if(lives == 2){
-            res = "giants_helmet.png";
-        }
-        else if(lives == 1){
-            res = "redskins_helmet.png";
-        }
-        else{
-            return null;
-        }
-        Image image = new Image(this.getClass().getClassLoader().getResourceAsStream(res));
-        return image;
     }
 
     public boolean powerBool(){
         Random rand = new Random();
         int powerInt = rand.nextInt(11);
-        return (powerInt <= 10);
+        return (powerInt <= 2);
     }
 
     public void setPosition(ImageView pic, double xPos, double yPos, double size){
@@ -89,11 +87,27 @@ public class Brick {
     public double getX(){ return myPosX; }
     public double getY(){ return myPosY; }
 
-    public ImageView getBrick(){ return myHelmet; }
+    public ImageView getBrick(){
+        if(myLives>0){
+            return myHelmets.get(myLives -1);
+        }
+        return myHelmets.get(0);
+    }
+
+    public ArrayList<ImageView> getMyHelmets(){ return myHelmets; }
 
     public int getLives(){ return myLives; }
 
     public boolean getHasPower(){ return hasPowerUp; }
 
     public powerUp getPower(){ return this.myPower; }
+
+    public ImageView loadHelmets(int i){
+        Image image = new Image(this.getClass().getClassLoader().getResourceAsStream(ALL_HELMETS[i]));
+        ImageView temp = new ImageView(image);
+        if(i+1 != myLives){
+            temp.setVisible(false);
+        }
+        return temp;
+    }
 }

@@ -54,7 +54,7 @@ public class DataReader {
                 if(lives != 0){
                     double xLoc = colWidth * (j);
                     double yLoc = colWidth * (i);
-                    Brick nBrick = new Brick(lives, xLoc, yLoc, colWidth);
+                    Brick nBrick = new Brick(lives, xLoc, yLoc, colWidth-10);
                     myBricks.add(nBrick);
                 }
             }
