@@ -20,10 +20,9 @@ public class powerUp {
     private CollisionHandler myCollisionHandler;
 
     public powerUp(int type, double x, double y, double size){
-        //Random rand = new Random(3);
-        //int dex = rand.nextInt(4);
-        //myType = dex;
-        myType = type;
+        Random rand = new Random();
+        int dex = rand.nextInt(4);
+        myType = dex;
         myPosX = x;
         myPosY = y;
         mySize = size;
@@ -53,13 +52,14 @@ public class powerUp {
         this.myPower.setY(myPower.getY() + POWER_SPEED*time);
     }
 
-    public void killPower(){Live = false;}
+    public void killPower(){ Live = false; }
 
-    public int catchPower(Paddle pad){
+    //public int getMyType(){ return myType; }
+    public int catchPower(Paddle pad, Ball ball){
         if (myCollisionHandler.detectCollision(getPowerImg(), pad.getPaddle())) {
             getPowerImg().setVisible(false);
             killPower();
-            pad.updateLives(1);
+            handlePower(pad, ball, myType);
             return 1;
         }
         if (getPowerImg().getY() >= HEIGHT) {
@@ -67,5 +67,20 @@ public class powerUp {
             killPower();
         }
         return 0;
+    }
+
+    public void handlePower(Paddle paddle, Ball ball, int type){
+        if(type == 0){ //air pump - big ball
+            ball.pumpPower();
+        }
+        else if(type == 1){ //challenge flag - extra life
+            paddle.updateLives(1);
+        }
+        else if(type == 2){ //getorade jug - fast paddle
+            paddle.speedUp();
+        }
+        else if(type == 3){ //stretcher - long paddle
+            paddle.stretch();
+        }
     }
 }
