@@ -9,6 +9,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static app.Breakout.HEIGHT;
 
@@ -34,11 +35,14 @@ public class Game {
     protected Ball myBall; //= new app.Ball(myScene.getWidth()/2, myScene.getHeight()/2);
     protected Paddle myPaddle;
     protected int numBricks;
-    protected ArrayList<Brick> myBricks;
-    protected int myLevel = 2;
+    //protected ArrayList<Brick> myBricks;
+    protected List<Brick> myBricks;
+    //protected int myLevel = 1;
+    protected int myLevel;
     protected int bricksLeft;
-    private ArrayList<ImageView> myPowers;
-    private ArrayList<powerUp> myPowersNew;
+    //private ArrayList<ImageView> myPowers;
+    //private ArrayList<powerUp> myPowersNew;
+    private List<powerUp> myPowersNew;
     //private CheatKeys ch = new CheatKeys();
     private int myScore;
 
@@ -48,6 +52,9 @@ public class Game {
     private CollisionHandler myCollisionHandler;
     private DataReader myDataReader;
     //variables for splashPage that needs to be moved
+    public Game(int lev){
+        myLevel = lev;
+    }
 
     // Create the game's "scene": what shapes will be in the game and their starting properties
     public Scene createGame() {
@@ -64,10 +71,10 @@ public class Game {
         myBall = new Ball(scene.getWidth() / 2, scene.getHeight() - 100);
         myPaddle = new Paddle(width, height);
         //myLevel = 1;
-        myPowers = new ArrayList<>();
+        //myPowers = new ArrayList<>();
         myPowersNew = new ArrayList<>();
-        //Read in level set up and brick location
 
+        //Read in level set up and brick location
         myDataReader = new DataReader(width, height);
         myDataReader.readBricks(myLevel);
         myBricks = myDataReader.getMyBricks();
@@ -140,10 +147,11 @@ public class Game {
             }
         }
 
-
+        //Check for collisions of each brick in scene (all in myBricks)
         for (Brick b : myBricks) {
             if (myCollisionHandler.detectCollision(myBall.getBall(), b.getBrick())) {
                 myScore++;
+                //myCollisionHandler.topCollision(myBall.getBall(), b.getBrick());
                 if(myBall.getMyStatus() == 0){
                     if (myCollisionHandler.sideCollision(myBall.getBall(), b.getBrick())) {
                         myBall.updateVeloBrick(-1, 1);
@@ -166,6 +174,7 @@ public class Game {
             }
         }
 
+        //If a powerUp was added to myPowersNew (brick with powerUp broke--> drop said powerUp)
         for(powerUp p: myPowersNew){
             p.dropPower(elapsedTime);
             myScore += p.catchPower(myPaddle, myBall);
@@ -176,4 +185,6 @@ public class Game {
 
         return 0;
     }
+
+
 }
