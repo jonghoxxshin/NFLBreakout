@@ -17,7 +17,8 @@ import javafx.util.Duration;
 import java.util.*;
 
 public class Brick {
-    private final static String[] ALL_HELMETS = {"redskins_helmet.png", "giants_helmet.png", "eagles_helmet.png"};
+    //private final static String[] ALL_HELMETS = {"redskins_helmet.png", "giants_helmet.png", "eagles_helmet.png"};
+    private final static String[] ALL_HELMETS = {"redskins_rect_crop.JPG", "giants_rect_crop.JPG", "eagles_rect_crop.JPG"};
 
     private int myLives;
     //private ImageView myHelmet;
@@ -35,15 +36,12 @@ public class Brick {
         myPosX = posX;
         myPosY = posY;
         mySize = size;
-        //myHelmet = new ImageView(setHelmet(lives));
 
         setHelmet(lives);
         for(ImageView h:myHelmets){
             setPosition(h, myPosX, myPosY, mySize);
         }
 
-        //System.out.println(myHelmets);
-        //setPosition(myHelmet, myPosX, myPosY, size);
         //https://stackoverflow.com/questions/2444019/how-do-i-generate-a-random-integer-between-min-and-max-in-java
         //Randomly decide whether brick is to have a powerUp and if it does, randomly assign said powerUp
         hasPowerUp = powerBool();
@@ -65,40 +63,12 @@ public class Brick {
             myHelmets.get(lives-2).setVisible(true);
             return 0;
         }
-
-        /*
-        if(myLives <= 0){
-            this.myHelmet.setVisible(false);
-            return 1;
-        }
-        else{
-            //System.out.println("HERE, SHOULD CHANGE PIC");
-            this.myHelmet = new ImageView(setHelmet(myLives));
-            return 0;
-        }*/
     }
 
-    //public Image setHelmet(int lives){
     public void setHelmet(int lives){
         for(int i=0; i<lives; i++){
             myHelmets.add(loadHelmets(i));
         }
-        /*
-        String res;
-        if(lives == 3){
-            res = "eagles_helmet.png";
-        }
-        else if(lives == 2){
-            res = "giants_helmet.png";
-        }
-        else if(lives == 1){
-            res = "redskins_helmet.png";
-        }
-        else{
-            return null;
-        }
-        Image image = new Image(this.getClass().getClassLoader().getResourceAsStream(res));
-        return image;*/
     }
 
     public boolean powerBool(){
