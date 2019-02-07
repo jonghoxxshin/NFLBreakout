@@ -91,7 +91,7 @@ public class Ball {
      */
     public void resetBall(double screenWidth, double screenHeight){
         myBall.setX(screenWidth/2);
-        myBall.setY(screenHeight-300);
+        myBall.setY(screenHeight-200);
         myVeloX = 0;
         myVeloY = Math.abs(myVeloY);
         setBall(0, 20);
