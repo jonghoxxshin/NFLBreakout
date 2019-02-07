@@ -71,14 +71,14 @@ public class Breakout extends Application {
     // Note, there are more sophisticated ways to animate shapes, but these simple ways work fine to start.
     private void step (double elapsedTime) {
         int splashState = splashPage.getSplash();
-        //If game != null --> means level was beaten and increment to next level
+        //If game != null --> level was beaten and increment to next level
         if (splashState == 1 && game == null) {
             game = new Game(1);
         } else if (splashState >= 3) {
             game = new TestGame(splashState);
             alertMsg = ((TestGame) game).getMsg();
         }
-
+        //if 2 --> alert message, no game started
         if (splashState == 1 || splashState >= 3) {
             stage.setScene(game.createGame());
             splashPage.setSplash(2);
@@ -110,7 +110,12 @@ public class Breakout extends Application {
         game = null;
     }
 
-
+    /**
+     * Called when game ends (either lose, win, or test case finishes)
+     *
+     * @param i
+     * @param msg
+     */
     public void alerter(int i, String msg){ //0 if win, 1 if lose, 2 if test
         gamePaused = true;
         //https://stackoverflow.com/questions/28937392/javafx-alerts-and-their-size
@@ -143,6 +148,10 @@ public class Breakout extends Application {
         a.show();
     }
 
+    /**
+     * Handles alert message quits -- either reset game or move onto next level (if game was won)
+     * @param res
+     */
     //https://stackoverflow.com/questions/44742134/animationtimer-showandwait-is-not-allowed-during-animation-processing
     public void handleAlert(int res){
         if(res == 1 || res == 2){
@@ -156,8 +165,6 @@ public class Breakout extends Application {
             else{
                 splashPage.setSplash(1);
             }
-            //System.out.println(game.myLevel);
-            //start(this.stage);
         }
     }
 

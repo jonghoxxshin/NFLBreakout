@@ -10,9 +10,7 @@ public class DataReader {
     private String[] testFiles = {"test_1.txt", "test_2.txt", "test_3.txt"};
     private double width,height;
 
-    //public ArrayList<Brick> myBricks;
     public List<Brick> myBricks;
-    //public ArrayList<String> testInfo;
     public List<String> testInfo;
 
     /**
@@ -112,8 +110,5 @@ public class DataReader {
      * Getter function returns bricks that were read in from data file
      * @returnz
      */
-    /*public ArrayList<Brick> getMyBricks(){
-        return myBricks;
-    }*/
     public List<Brick> getMyBricks() {return myBricks;}
 }

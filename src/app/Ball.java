@@ -15,7 +15,7 @@ public class Ball {
     private ImageView myBall;
     private int myVeloX = 0;
     private int myVeloY = -2;
-    //Status 0 = normal ball; 1 = powerUp big ball (breaks any brick in one hit)
+    //Status 0 = normal ball; 1 = powerUp big ball
     private int myStatus = 0;
     private double mySize;
 
@@ -50,7 +50,6 @@ public class Ball {
      */
     public void wallBounce(double width, double height){
         if(myBall.getX() <= 0 || myBall.getX() + mySize >= width){
-
                 myVeloX *= -1;
         }
         if(myBall.getY() <= 0){
@@ -132,13 +131,9 @@ public class Ball {
      */
     public void pumpPower() {
         if (myStatus != 1) {
-            //myStatus = 1;
-            //myBall.setFitWidth(30);
-            //myBall.setFitHeight(30);
-            //mySize = 30;
             setBall(1, 30);
         }
-        timeOut("bigBall");
+        timeOut();
     }
 
     /**
@@ -156,18 +151,13 @@ public class Ball {
     /**
      * Called after delay time (5 seconds) when airPump powerUp is caught
      * Allows ball to be "big" for 5 seconds before resetting to normal params
-     * @param powType
      */
     //https://stackoverflow.com/questions/35512648/adding-a-timer-to-my-program-javafx
-    public void timeOut(String powType){
+    public void timeOut(){
         Timer timer = new Timer();
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
-                //myStatus = 0;
-                //myBall.setFitWidth(20);
-                //myBall.setFitHeight(20);
-                //mySize = 20;
                 setBall(0, 20);
             }
         };

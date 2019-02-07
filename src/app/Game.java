@@ -119,9 +119,10 @@ public class Game {
         display.setText("Lives remaining : " + myPaddle.getLives() + "\n Level: " + myLevel + "\n Score: " + myScore);
 
         if (myCollisionHandler.getBottom(myBall.getBall()) >= HEIGHT) {
+            myScore -= 1;
             if (myPaddle.updateLives(-1) == 0) {
                 isPaused = true;
-                return -1;
+                return -1; //You lose -- alert in breakout
             }
             myBall.resetBall(WIDTH, HEIGHT);
         }
@@ -158,7 +159,7 @@ public class Game {
                     //System.out.println(bricksLeft);
                 }
                 if (bricksLeft == 0) {
-                    return 1;
+                    return 1; //beat the level
                 }
                 if (b.getLives() == 0 && b.getHasPower()) {
                     myPowersNew.add(b.getPower());
@@ -170,7 +171,6 @@ public class Game {
         for(powerUp p: myPowersNew){
             p.dropPower(elapsedTime);
             myScore += p.catchPower(myPaddle, myBall);
-            //catchPower(p);
         }
 
         myBall.wallBounce(WIDTH, HEIGHT);

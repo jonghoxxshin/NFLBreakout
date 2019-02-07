@@ -1,9 +1,6 @@
 package app;
 
 import javafx.scene.Scene;
-import javafx.scene.image.ImageView;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class TestGame extends Game {
