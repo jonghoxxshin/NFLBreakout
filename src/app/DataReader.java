@@ -110,7 +110,7 @@ public class DataReader {
 
     /**
      * Getter function returns bricks that were read in from data file
-     * @return
+     * @returnz
      */
     /*public ArrayList<Brick> getMyBricks(){
         return myBricks;
