@@ -7,7 +7,7 @@ import java.util.Random;
 
 import static app.Breakout.HEIGHT;
 
-public class powerUp {
+abstract public class powerUp {
     //Array of filenames containing powerUp images (to add power - add file name this this array)
     private static final String[] ALL_POWERUPS = {"air_pump_powerup.png", "challenge_powerup.png", "gatorade_powerup.png", "stretcher_powerup.png"};
     private static final int POWER_SPEED = 200;
@@ -29,10 +29,8 @@ public class powerUp {
      * @param y
      * @param size
      */
-    public powerUp(double x, double y, double size){
-        Random rand = new Random();
-        int dex = rand.nextInt(4);
-        myType = dex;
+    public powerUp(double x, double y, double size, int type){
+        myType = type;
         myPosX = x;
         myPosY = y;
         mySize = size;
@@ -93,7 +91,8 @@ public class powerUp {
         if (myCollisionHandler.detectCollision(getPowerImg(), pad.getPaddle())) {
             getPowerImg().setVisible(false);
             killPower();
-            handlePower(pad, ball, myType);
+            handlePower(pad, ball);
+            //handlePower(pad, ball, myType);
             return 1;
         }
         if (getPowerImg().getY() >= HEIGHT) {
@@ -105,24 +104,9 @@ public class powerUp {
 
     /**
      * Called by catchPower to implement respective powerUps
-     * Call helper methods in Ball.java and Paddle.java based on type of power
-     * SHOULD BE ABSTRACT CLASS BECAUSE OF IF/ELSE IF STATEMENTS
+     * abstract called in specific powerUp types
      * @param paddle
      * @param ball
-     * @param type
      */
-    public void handlePower(Paddle paddle, Ball ball, int type){
-        if(type == 0){ //air pump - big ball
-            ball.pumpPower();
-        }
-        else if(type == 1){ //challenge flag - extra life
-            paddle.updateLives(1);
-        }
-        else if(type == 2){ //getorade jug - fast paddle
-            paddle.speedUp();
-        }
-        else if(type == 3){ //stretcher - long paddle
-            paddle.stretch();
-        }
-    }
+    abstract public void handlePower(Paddle paddle, Ball ball);
 }

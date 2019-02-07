@@ -32,18 +32,14 @@ public class Game {
     private static final double WIDTH = 684;
 
     // some things we need to remember during our game
-    protected Ball myBall; //= new app.Ball(myScene.getWidth()/2, myScene.getHeight()/2);
+    protected Ball myBall;
     protected Paddle myPaddle;
     protected int numBricks;
-    //protected ArrayList<Brick> myBricks;
+
     protected List<Brick> myBricks;
-    //protected int myLevel = 1;
     protected int myLevel;
     protected int bricksLeft;
-    //private ArrayList<ImageView> myPowers;
-    //private ArrayList<powerUp> myPowersNew;
     private List<powerUp> myPowersNew;
-    //private CheatKeys ch = new CheatKeys();
     private int myScore;
 
     //private Group root;
@@ -70,8 +66,6 @@ public class Game {
         ImageView mv = new ImageView(bkg);
         myBall = new Ball(scene.getWidth() / 2, scene.getHeight() - 100);
         myPaddle = new Paddle(width, height);
-        //myLevel = 1;
-        //myPowers = new ArrayList<>();
         myPowersNew = new ArrayList<>();
 
         //Read in level set up and brick location
@@ -102,7 +96,6 @@ public class Game {
             for(ImageView h:tempArray){
                 root.getChildren().add(h);
             }
-            //root.getChildren().add(b.getBrick());
             if (b.getHasPower()) {
                 root.getChildren().add(b.getPower().getPowerImg());
             }
@@ -126,9 +119,10 @@ public class Game {
         display.setText("Lives remaining : " + myPaddle.getLives() + "\n Level: " + myLevel + "\n Score: " + myScore);
 
         if (myCollisionHandler.getBottom(myBall.getBall()) >= HEIGHT) {
+            myScore -= 1;
             if (myPaddle.updateLives(-1) == 0) {
                 isPaused = true;
-                return -1;
+                return -1; //You lose -- alert in breakout
             }
             myBall.resetBall(WIDTH, HEIGHT);
         }
@@ -151,7 +145,6 @@ public class Game {
         for (Brick b : myBricks) {
             if (myCollisionHandler.detectCollision(myBall.getBall(), b.getBrick())) {
                 myScore++;
-                //myCollisionHandler.topCollision(myBall.getBall(), b.getBrick());
                 if(myBall.getMyStatus() == 0){
                     if (myCollisionHandler.sideCollision(myBall.getBall(), b.getBrick())) {
                         myBall.updateVeloBrick(-1, 1);
@@ -166,7 +159,7 @@ public class Game {
                     //System.out.println(bricksLeft);
                 }
                 if (bricksLeft == 0) {
-                    return 1;
+                    return 1; //beat the level
                 }
                 if (b.getLives() == 0 && b.getHasPower()) {
                     myPowersNew.add(b.getPower());
@@ -178,7 +171,6 @@ public class Game {
         for(powerUp p: myPowersNew){
             p.dropPower(elapsedTime);
             myScore += p.catchPower(myPaddle, myBall);
-            //catchPower(p);
         }
 
         myBall.wallBounce(WIDTH, HEIGHT);
