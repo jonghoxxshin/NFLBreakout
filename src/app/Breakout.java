@@ -26,11 +26,11 @@ import java.net.URISyntaxException;
  *
  * Right on
  *
- * * @author Robert C. Duvall
+ * * @author Ryan Bloom & Jongho Shin
  */
 public class Breakout extends Application {
 
-    public static final String TITLE = "Texas Dallas Superbowl!";
+    public static final String TITLE = "DALLAS COWBOYS BREAKOUT!";
     public static final int HEIGHT = 628;
     public static final int FRAMES_PER_SECOND = 60;
     public static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
@@ -87,7 +87,7 @@ public class Breakout extends Application {
         int splashState = splashPage.getSplash();
         //If game != null --> level was beaten and increment to next level
         if (splashState == 1 && game == null) {
-            game = new Game(3);
+            game = new Game(1);
         } else if (splashState >= 3) {
             game = new TestGame(splashState);
             alertMsg = ((TestGame) game).getMsg();
@@ -118,6 +118,9 @@ public class Breakout extends Application {
         }
     }
 
+    /**
+     * Displays splash page after losing, winning, or completing a test case
+     */
     public void resetGame(){
         stage.setScene(splashPage.getSplashScene());
         splashPage.setSplash(0);
@@ -126,7 +129,6 @@ public class Breakout extends Application {
 
     /**
      * Called when game ends (either lose, win, or test case finishes)
-     *
      * @param i
      * @param msg
      */

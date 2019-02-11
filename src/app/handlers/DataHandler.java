@@ -102,8 +102,6 @@ public class DataHandler {
             String temp = scan.nextLine();
             testInfo.add(temp);
         }
-        //System.out.println(testInfo);
-        //return testInfo;
         return testInfo;
     }
 

@@ -93,7 +93,6 @@ abstract public class powerUp {
             getPowerImg().setVisible(false);
             killPower();
             handlePower(pad, ball);
-            //handlePower(pad, ball, myType);
             return 1;
         }
         if (getPowerImg().getY() >= HEIGHT) {

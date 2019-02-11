@@ -19,6 +19,7 @@ import java.util.List;
 
 
 import static app.Breakout.HEIGHT;
+import static javafx.application.Application.getUserAgentStylesheet;
 
 
 /**
@@ -97,8 +98,7 @@ public class Game {
         root.getChildren().add(myPaddle.getPaddle());
         root.getChildren().add(display);
 
-
-
+        //Add brick ImageViews to scene
         for (Brick b : myBricks) {
             var tempArray = b.getMyHelmets();
             for(ImageView h:tempArray){
@@ -120,36 +120,56 @@ public class Game {
     // Change properties of shapes to animate them
     // Note, there are more sophisticated ways to animate shapes, but these simple ways work fine to start.
     public int step(double elapsedTime) { // -1 => lost  // 1 -> win // 0 -> on-going
-        // update attributes
+        // update attributes of ball and paddle
         myBall.move(elapsedTime);
+        myBall.wallBounce(WIDTH, HEIGHT);
         myPaddle.move(WIDTH);
 
         display.setText("Lives remaining : " + myPaddle.getLives() + "\n Level: " + myLevel + "\n Score: " + myScore);
 
-        if (myCollisionHandler.getBottom(myBall.getBall()) >= HEIGHT) {
-            myScore -= 1;
+        //Check if ball hits bottom of screen
+        if(loseLifeCheck()){
             if (myPaddle.updateLives(-1) == 0) {
                 isPaused = true;
                 return -1; //You lose -- alert in breakout
             }
-            myBall.resetBall(WIDTH, HEIGHT);
         }
 
-        // check for collisions
-        boolean left = myCollisionHandler.detectCollision(myBall.getBall(), myPaddle.getPaddlePart(0));
-        boolean center = myCollisionHandler.detectCollision(myBall.getBall(), myPaddle.getPaddlePart(1));
-        boolean right = myCollisionHandler.detectCollision(myBall.getBall(), myPaddle.getPaddlePart(2));
-
-        if (left || center || right) {
-            myBall.updateVeloPaddle(left ? -1 : right ? 1 : 0);
-            myBall.move(elapsedTime);
-
-            if (!myBall.firstBounce) {
-                myBall.firstBounce = true;
-            }
-        }
+        // check for collisions (ball and paddle)
+        paddleCollision(elapsedTime);
 
         //Check for collisions of each brick in scene (all in myBricks)
+        brickCollision();
+        if(bricksLeft == 0){
+            return 1;//beat level
+        }
+
+        //If a powerUp was added to myPowersNew (brick with powerUp broke--> drop said powerUp)
+        for(powerUp p: myPowersNew){
+            p.dropPower(elapsedTime);
+            myScore += p.catchPower(myPaddle, myBall);
+        }
+
+        return 0;
+    }
+
+    /**
+     * Helper method called in step to check if ball hits bottom of screen
+     * @return true if hit bottom of screen, false otherwise
+     */
+    public boolean loseLifeCheck(){
+        if (myCollisionHandler.getBottom(myBall.getBall()) >= HEIGHT) {
+            myScore -= 1;
+            myBall.resetBall(WIDTH, HEIGHT);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Helper method called in step to detect brick-ball collisions and update brick, bricksLeft, and myPowersNew accordingly
+     */
+    public void brickCollision(){
         for (Brick b : myBricks) {
             if (myCollisionHandler.detectCollision(myBall.getBall(), b.getBrick())) {
                 myScore++;
@@ -160,31 +180,36 @@ public class Game {
                         myBall.updateVeloBrick(1, -1);
                     }
                     bricksLeft -= b.updateBrick(1, b.getLives());
-                    //System.out.println(bricksLeft);
                 }
+                //Big ball - breaks brick
                 else{
                     bricksLeft -= b.updateBrick(3, b.getLives());
-                    //System.out.println(bricksLeft);
                 }
-                if (bricksLeft == 0) {
-                    return 1; //beat the level
-                }
+                //If brick breaks and there is a powerUp -- add it to myPowersNew
                 if (b.getLives() == 0 && b.getHasPower()) {
                     myPowersNew.add(b.getPower());
                 }
             }
         }
-
-        //If a powerUp was added to myPowersNew (brick with powerUp broke--> drop said powerUp)
-        for(powerUp p: myPowersNew){
-            p.dropPower(elapsedTime);
-            myScore += p.catchPower(myPaddle, myBall);
-        }
-
-        myBall.wallBounce(WIDTH, HEIGHT);
-
-        return 0;
     }
 
+    /**
+     * Helper method called in step to detect ball-paddle collisions and update ball velocity accordingly
+     * @param time
+     */
+    public void paddleCollision(double time){
+        // check for collisions (ball and paddle)
+        boolean left = myCollisionHandler.detectCollision(myBall.getBall(), myPaddle.getPaddlePart(0));
+        boolean center = myCollisionHandler.detectCollision(myBall.getBall(), myPaddle.getPaddlePart(1));
+        boolean right = myCollisionHandler.detectCollision(myBall.getBall(), myPaddle.getPaddlePart(2));
 
+        if (left || center || right) {
+            myBall.updateVeloPaddle(left ? -1 : right ? 1 : 0);
+            myBall.move(time);
+
+            if (!myBall.firstBounce) {
+                myBall.firstBounce = true;
+            }
+        }
+    }
 }

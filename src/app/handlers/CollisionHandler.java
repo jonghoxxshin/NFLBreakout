@@ -57,7 +57,6 @@ public class CollisionHandler {
     public double getBottom(ImageView arg){
         return arg.getY() + arg.getBoundsInLocal().getHeight();
     }
-    public double getCenter(ImageView arg){ return arg.getX() + getRight(arg) / 2;}
 
     /**
      * Called when brick-ball collision is detected
@@ -68,9 +67,10 @@ public class CollisionHandler {
      * @return
      */
     public boolean sideCollision(ImageView arg1, ImageView arg2){
-        /*if(arg1.getY() <= arg2.getY() || (getBottom(arg1)>= getBottom(arg2))){
+        if(arg1.getY() <= arg2.getY() || (getBottom(arg1)>= getBottom(arg2))){
             return false;
-        }*/
+        }
+        /*
         if(arg1.getY() <= arg2.getY()){
             if(getBottom(arg1) - 2 > arg2.getY()){
                 return true;
@@ -78,27 +78,11 @@ public class CollisionHandler {
             return false;
         }
         else if(getBottom(arg1) >= getBottom(arg2)){
-            /*if(arg1.getY() + 2 < getBottom(arg2)){
+            *//*if(arg1.getY() + 2 < getBottom(arg2)){
                 return true;
-            }*/
+            }*//*
             return false;
-        }
-        return true;
-    }
-
-
-    /**
-     * Detects top collision, used in tandem with sideCollision to detect corner hits and handle accordingly
-     * @param arg1
-     * @param arg2
-     * @return
-     */
-    public boolean topCollision(ImageView arg1, ImageView arg2){
-        if(arg1.getX() <= arg2.getX() || (getRight(arg1)>=getRight(arg2))){
-            System.out.println("NOT TOP");
-            return false;
-        }
-        System.out.println("TOP COLLISION");
+        }*/
         return true;
     }
 }

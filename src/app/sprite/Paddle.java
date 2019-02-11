@@ -13,9 +13,7 @@ import java.util.TimerTask;
 
 public class Paddle {
     public static final String PADDLE_IMAGE = "paddle.png";
-    public static final long PADDLE_WIDTH = 80;
     public static final long PADDLE_HEIGHT = 10;
-    public static final long PADDLE_LONG_WIDTH = 150;
 
 
     private ImageView myPaddle;
@@ -44,7 +42,6 @@ public class Paddle {
         myPaddle.setY(screenHeight-10);
         myPaddle.setFitWidth(paddleWidth);
         myPaddle.setFitHeight(PADDLE_HEIGHT);
-        //setPaddle(paddle_speed, paddleWidth);
     }
 
     /**
@@ -58,10 +55,8 @@ public class Paddle {
         if(myLives < 1){
             return 0;
         }
+        //Lose a life, powerUps should be lost too
         if(i<0){
-            //paddle_speed = 10;
-            //paddleWidth = 80;
-            //myPaddle.setFitWidth(80);
             setPaddle(10, 80);
         }
         return 1;
@@ -169,8 +164,6 @@ public class Paddle {
      * Handles "stretcher" powerUp -> increases paddle size to 150px for 5 seconds
      */
     public void stretch(){
-        //myPaddle.setFitWidth(150);
-        //paddleWidth = 150;
         setPaddle(paddle_speed, 150);
         timeOut("stretch");
     }
