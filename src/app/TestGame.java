@@ -1,12 +1,13 @@
 package app;
 
+import app.handlers.DataHandler;
 import javafx.scene.Scene;
 import java.util.List;
 
 public class TestGame extends Game {
     private int testNum;
     private Scene scene;
-    private DataReader datRead;
+    private DataHandler datRead;
     private List<String> testInfo;
 
     private int x;
@@ -24,7 +25,7 @@ public class TestGame extends Game {
         this.scene = super.createGame();
         this.testNum = testNum;
         //Reads test info data from text files
-        this.datRead = new DataReader(0, 0);
+        this.datRead = new DataHandler(0, 0);
         this.testInfo = datRead.readTestFiles(testNum);
         parseTestInfo(testInfo);
         //System.out.println(testInfo);
