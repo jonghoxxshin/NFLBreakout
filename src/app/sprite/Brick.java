@@ -7,7 +7,6 @@ import javafx.scene.image.ImageView;
 import java.util.*;
 
 public class Brick {
-    //private final static String[] ALL_HELMETS = {"redskins_helmet.png", "giants_helmet.png", "eagles_helmet.png"};
     //All possible helmet/brick images
     private final static String[] ALL_HELMETS = {"redskins_rect_crop.JPG", "giants_rect_crop.JPG", "eagles_rect_crop.JPG"};
 
@@ -41,7 +40,6 @@ public class Brick {
             setPosition(h, myPosX, myPosY, mySize);
         }
 
-        //https://stackoverflow.com/questions/2444019/how-do-i-generate-a-random-integer-between-min-and-max-in-java
         //Randomly decide whether brick is to have a powerUp
         hasPowerUp = powerBool();
         if(hasPowerUp){
@@ -70,7 +68,7 @@ public class Brick {
             return 1;
         }
         else{
-            //If brick is not destroyed (simply loses 1 life) --> current ImageView should be invisible
+            //If brick is not destroyed (loses 1 life) --> current ImageView should be invisible
             //ImageView of lower life brick should be set to visible
             myHelmets.get(lives-1).setVisible(false);
             myHelmets.get(lives-2).setVisible(true);

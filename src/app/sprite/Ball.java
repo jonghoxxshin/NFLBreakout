@@ -79,7 +79,6 @@ public class Ball {
      */
     public void updateVeloPaddle(int pos){ // pos -1 if left 0 if center 1 if right
         myVeloX += pos;
-        //myVeloY = -Math.abs(myVeloY);
         myVeloY *= -1;
     }
 
@@ -97,13 +96,6 @@ public class Ball {
         setBall(0, 20);
         firstBounce = false;
     }
-
-    /**
-     * getter for x and y velocities
-     * @return x and y velocities
-     */
-    public int getXVelo(){ return myVeloX;}
-    public int getYVelo(){return myVeloY;}
 
     /**
      * Returns the ImageView of the ball to be added to the scene
