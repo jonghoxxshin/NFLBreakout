@@ -78,6 +78,12 @@ public class CollisionHandler {
         }
     }
 
+    /**
+     * Detects top collision, used in tandem with sideCollision to detect corner hits and handle accordingly
+     * @param arg1
+     * @param arg2
+     * @return
+     */
     public boolean topCollision(ImageView arg1, ImageView arg2){
         if(arg1.getX() <= arg2.getX() || (getRight(arg1)>=getRight(arg2))){
             System.out.println("NOT TOP");

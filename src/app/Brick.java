@@ -23,13 +23,11 @@ public class Brick {
 
     //Member variables associated with Brick objects
     private int myLives;
-    //private ImageView myHelmet;
     private double myPosX;
     private double myPosY;
     private boolean hasPowerUp;
     private double mySize;
     private powerUp myPower;
-    //private ArrayList<ImageView> myHelmets;
     private List<ImageView> myHelmets;
 
     /**
@@ -57,7 +55,9 @@ public class Brick {
         //Randomly decide whether brick is to have a powerUp
         hasPowerUp = powerBool();
         if(hasPowerUp){
-            myPower = new powerUp(myPosX, myPosY, mySize/2);
+            Random rand = new Random();
+            int type = rand.nextInt(4);
+            myPower = setMyPower(type);
         } else{ myPower = null; }
     }
 
@@ -107,6 +107,18 @@ public class Brick {
         Random rand = new Random();
         int powerInt = rand.nextInt(11);
         return (powerInt <= 2);
+    }
+
+    /**
+     * selects which concrete class of super class powerUp to initialize based on random input
+     * @param type
+     * @return
+     */
+    public powerUp setMyPower(int type){
+        if(type == 0){return new BigBall(myPosX, myPosY, mySize/2);}
+        else if(type == 1){return new ExtraLife(myPosX, myPosY, mySize/2);}
+        else if(type == 2){ return new SpeedUp(myPosX, myPosY, mySize/2);}
+        else { return new Stretch(myPosX, myPosY, mySize/2);}
     }
 
     /**

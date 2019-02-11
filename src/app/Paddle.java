@@ -20,16 +20,17 @@ public class Paddle {
     private int myLives;
     private double paddle_speed = 10;
     private double paddleWidth = 80;
-    //private boolean speedUp = false;
-    private boolean lengthUp = false;
 
     private double paddle_velocity = 0;
     private Set<KeyCode> currentlyPressed = new HashSet<>();
 
-    private CheatKeys ch = new CheatKeys();
-
     double screenWidth, screenHeight;
 
+    /**
+     * Initializes paddle (size changes with screen size)
+     * @param screenWidth
+     * @param screenHeight
+     */
     public Paddle(double screenWidth, double screenHeight){
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
@@ -158,7 +159,6 @@ public class Paddle {
      * Handles "gatorade" powerUp -> increases paddle speed by 1.5 for 5 seconds
      */
     public void speedUp(){
-        //paddle_speed = 15;
         setPaddle(15, paddleWidth);
         timeOut("speed");
     }
@@ -184,12 +184,9 @@ public class Paddle {
             @Override
             public void run() {
                 if(powType.equals("stretch")){
-                    //myPaddle.setFitWidth(80);
-                    //paddleWidth = 80;
                     setPaddle(paddle_speed, 80);
                 }
                 else{
-                    //paddle_speed = 10;
                     setPaddle(10, paddleWidth);
                 }
             }
