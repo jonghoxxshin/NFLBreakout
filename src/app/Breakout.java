@@ -4,15 +4,17 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import java.util.Optional;
+import java.net.URISyntaxException;
 
 
 /**
@@ -28,7 +30,7 @@ import java.util.Optional;
  */
 public class Breakout extends Application {
 
-    public static final String TITLE = "Example JavaFX";
+    public static final String TITLE = "Texas Dallas Superbowl!";
     public static final int HEIGHT = 628;
     public static final int FRAMES_PER_SECOND = 60;
     public static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
@@ -59,6 +61,18 @@ public class Breakout extends Application {
         stage.setTitle(TITLE);
         stage.show();
         stage.setScene(splashPage.getSplashScene());
+
+        String path = null;
+        try {
+            path = Game.class.getClassLoader().getResource("superbowl-music.wav").toURI().toString();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        Media media = new Media(path);
+        MediaPlayer mp = new MediaPlayer(media);
+        mp.setAutoPlay(true);
+        MediaView mediaView = new MediaView(mp);
+
         // attach "game loop" to timeline to play it
         var frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> step(SECOND_DELAY));
         animation = new Timeline();

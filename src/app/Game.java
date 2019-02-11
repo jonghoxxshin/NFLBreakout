@@ -1,5 +1,11 @@
 package app;
 
+import app.handlers.CollisionHandler;
+import app.handlers.DataHandler;
+import app.powerup.powerUp;
+import app.sprite.Ball;
+import app.sprite.Brick;
+import app.sprite.Paddle;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -10,6 +16,7 @@ import javafx.scene.text.Text;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 import static app.Breakout.HEIGHT;
 
@@ -46,7 +53,7 @@ public class Game {
     private Text display;
     public boolean isPaused;
     private CollisionHandler myCollisionHandler;
-    private DataReader myDataReader;
+    private DataHandler myDataHandler;
     //variables for splashPage that needs to be moved
     public Game(int lev){
         myLevel = lev;
@@ -69,9 +76,9 @@ public class Game {
         myPowersNew = new ArrayList<>();
 
         //Read in level set up and brick location
-        myDataReader = new DataReader(width, height);
-        myDataReader.readBricks(myLevel);
-        myBricks = myDataReader.getMyBricks();
+        myDataHandler = new DataHandler(width, height);
+        myDataHandler.readBricks(myLevel);
+        myBricks = myDataHandler.getMyBricks();
 
         //background setting
         myCollisionHandler = new CollisionHandler();
@@ -89,6 +96,7 @@ public class Game {
         root.getChildren().add(myBall.getBall());
         root.getChildren().add(myPaddle.getPaddle());
         root.getChildren().add(display);
+
 
 
         for (Brick b : myBricks) {
