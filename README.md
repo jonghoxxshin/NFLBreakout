@@ -5,7 +5,7 @@ COMPLETE THIS TEMPLATE FILE, then remove this line of text.
 
 This project implements the game of app.Breakout.
 
-Name: 
+Name: Ryan Bloom, Ed Jongho Shin
 
 ### Timeline
 
