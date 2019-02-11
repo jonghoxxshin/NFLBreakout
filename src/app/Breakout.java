@@ -98,9 +98,33 @@ public class Breakout extends Application {
             splashPage.setSplash(2);
             gamePaused = false;
         }
-
-        if(game != null && !gamePaused) {
+        alertCheck(elapsedTime);
+        /*if(game != null && !gamePaused) {
             int res = game.step(elapsedTime);
+            if(res == -1) { // lost
+                alerter(1, "You ran out of lives! You lost and are out of the playoffs!");
+            } else if(res == 1) { // won
+                if(game.myLevel <= 2){
+                    alerter(0, "You broke all the bricks! Onto the next round!");
+                }
+                else{ alerter(0, "You beat the final level! SUPER BOWL CHAMPS!"); }
+                //alerter(0, "You broke all the bricks! You beat the level!");
+            } else if(res == 2){
+                //test success
+                alerter(2, alertMsg);
+            }else if(res ==3){
+                //test failed
+            }
+        }*/
+    }
+
+    /**
+     * Helper method to check if an alert should be thrown an
+     * @param time
+     */
+    public void alertCheck(double time){
+        if(game != null && !gamePaused) {
+            int res = game.step(time);
             if(res == -1) { // lost
                 alerter(1, "You ran out of lives! You lost and are out of the playoffs!");
             } else if(res == 1) { // won

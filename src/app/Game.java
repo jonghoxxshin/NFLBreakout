@@ -122,7 +122,6 @@ public class Game {
     public int step(double elapsedTime) { // -1 => lost  // 1 -> win // 0 -> on-going
         // update attributes of ball and paddle
         myBall.move(elapsedTime);
-        myBall.wallBounce(WIDTH, HEIGHT);
         myPaddle.move(WIDTH);
 
         display.setText("Lives remaining : " + myPaddle.getLives() + "\n Level: " + myLevel + "\n Score: " + myScore);
@@ -145,10 +144,8 @@ public class Game {
         }
 
         //If a powerUp was added to myPowersNew (brick with powerUp broke--> drop said powerUp)
-        for(powerUp p: myPowersNew){
-            p.dropPower(elapsedTime);
-            myScore += p.catchPower(myPaddle, myBall);
-        }
+        powerHelper(elapsedTime);
+        myBall.wallBounce(WIDTH, HEIGHT);
 
         return 0;
     }
@@ -210,6 +207,13 @@ public class Game {
             if (!myBall.firstBounce) {
                 myBall.firstBounce = true;
             }
+        }
+    }
+
+    public void powerHelper(double time){
+        for(powerUp p: myPowersNew){
+            p.dropPower(time);
+            myScore += p.catchPower(myPaddle, myBall);
         }
     }
 }
