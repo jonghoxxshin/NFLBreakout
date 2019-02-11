@@ -68,15 +68,24 @@ public class CollisionHandler {
      * @return
      */
     public boolean sideCollision(ImageView arg1, ImageView arg2){
-        if(arg1.getY() <= arg2.getY() || (getBottom(arg1)>= getBottom(arg2))){
-            //System.out.println("SIDE COLLISION");
+        /*if(arg1.getY() <= arg2.getY() || (getBottom(arg1)>= getBottom(arg2))){
+            return false;
+        }*/
+        if(arg1.getY() <= arg2.getY()){
+            if(getBottom(arg1) - 2 > arg2.getY()){
+                return true;
+            }
             return false;
         }
-        else{
-            //System.out.println("TOP COLLISION");
-            return true;
+        else if(getBottom(arg1) >= getBottom(arg2)){
+            /*if(arg1.getY() + 2 < getBottom(arg2)){
+                return true;
+            }*/
+            return false;
         }
+        return true;
     }
+
 
     /**
      * Detects top collision, used in tandem with sideCollision to detect corner hits and handle accordingly

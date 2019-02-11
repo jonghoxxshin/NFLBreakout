@@ -73,7 +73,7 @@ public class Breakout extends Application {
         int splashState = splashPage.getSplash();
         //If game != null --> level was beaten and increment to next level
         if (splashState == 1 && game == null) {
-            game = new Game(1);
+            game = new Game(3);
         } else if (splashState >= 3) {
             game = new TestGame(splashState);
             alertMsg = ((TestGame) game).getMsg();
