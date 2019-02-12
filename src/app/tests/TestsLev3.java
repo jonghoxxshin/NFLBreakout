@@ -37,10 +37,10 @@ public class TestsLev3 extends TestGame {
         if(getTestNum() == 3 && myPaddle.getPaddleWidth() > 80){
             return 2;
         }
-        if(getTestNum() == 4 && myPaddle.getPaddleSpeed() > 10){
+        else if(getTestNum() == 4 && myPaddle.getPaddleSpeed() > 10){
             return 2;
         }
-        if(myBall.getBall().getX() > 450 || myBall.getBall().getX() < 350){
+        if(getTestNum() == 5 && (myBall.getBall().getX() > 450 || myBall.getBall().getX() < 350)){
             return 2;
         }
         return superStep(time);

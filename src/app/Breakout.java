@@ -91,6 +91,7 @@ public class Breakout extends Application {
         int splashState = splashPage.getSplash();
         //If game != null --> level was beaten and increment to next level
         if (splashState == 1) {
+            //No game has been played, initialize level 1
             if(game == null){
                 game = new Game(1);
             }
@@ -99,6 +100,7 @@ public class Breakout extends Application {
                 game = new Game(lev);
             }
         } else if (splashState >= 3) {
+            //No game has been played, start at level 1 tests
             if(game == null){
                 game = new TestsLev1(splashState);
             }
