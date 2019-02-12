@@ -47,7 +47,8 @@ public class Game {
     protected List<Brick> myBricks;
     protected int myLevel;
     protected int bricksLeft;
-    private List<powerUp> myPowersNew;
+    protected List<powerUp> myPowersNew;
+    protected Group myGroup;
     private int myScore;
 
     //private Group root;
@@ -113,6 +114,7 @@ public class Game {
         scene.setOnKeyPressed(e -> myPaddle.handleKeyPressed(e.getCode(), myBall));
         scene.setOnKeyReleased(e -> myPaddle.handleKeyReleased(e.getCode()));
         //scene.setOnKeyPressed(e -> handleCheatKeys(e.getCode()));
+        myGroup = root;
         return scene;
     }
 
@@ -210,10 +212,17 @@ public class Game {
         }
     }
 
+    /**
+     * Helper method called to drop powers and check if they're caught by paddle
+     * @param time
+     */
     public void powerHelper(double time){
         for(powerUp p: myPowersNew){
             p.dropPower(time);
             myScore += p.catchPower(myPaddle, myBall);
         }
     }
+
+    public void setMyLevel(int i){this.myLevel = i;}
+    public int getMyLevel(){return this.myLevel;}
 }

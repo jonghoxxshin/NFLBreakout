@@ -180,4 +180,27 @@ public class Brick {
         }
         return temp;
     }
+
+    /**
+     * Implementing equals and hashCode for collections
+     * @param o
+     * @return
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Brick brick = (Brick) o;
+        return myLives == brick.myLives &&
+                Double.compare(brick.myPosX, myPosX) == 0 &&
+                Double.compare(brick.myPosY, myPosY) == 0 &&
+                hasPowerUp == brick.hasPowerUp &&
+                Double.compare(brick.mySize, mySize) == 0 &&
+                Objects.equals(myPower, brick.myPower) &&
+                Objects.equals(myHelmets, brick.myHelmets);
+    }
+    @Override
+    public int hashCode() {
+        return Objects.hash(myLives, myPosX, myPosY, hasPowerUp, myPower);
+    }
 }

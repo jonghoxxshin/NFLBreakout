@@ -1,5 +1,9 @@
 package app;
 
+import app.tests.TestGame;
+import app.tests.TestsLev1;
+import app.tests.TestsLev2;
+import app.tests.TestsLev3;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -71,7 +75,7 @@ public class Breakout extends Application {
         Media media = new Media(path);
         MediaPlayer mp = new MediaPlayer(media);
         mp.setAutoPlay(true);
-        MediaView mediaView = new MediaView(mp);
+        //MediaView mediaView = new MediaView(mp);
 
         // attach "game loop" to timeline to play it
         var frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> step(SECOND_DELAY));
@@ -86,10 +90,24 @@ public class Breakout extends Application {
     private void step (double elapsedTime) {
         int splashState = splashPage.getSplash();
         //If game != null --> level was beaten and increment to next level
-        if (splashState == 1 && game == null) {
-            game = new Game(1);
+        if (splashState == 1) {
+            if(game == null){
+                game = new Game(1);
+            }
+            else{
+                int lev = game.getMyLevel();
+                game = new Game(lev);
+            }
         } else if (splashState >= 3) {
-            game = new TestGame(splashState);
+            if(game == null){
+                game = new TestsLev1(splashState);
+            }
+            else{
+                int lev = game.getMyLevel();
+                if(lev == 1){game = new TestsLev1(splashState);}
+                else if(lev == 2){game = new TestsLev2(splashState);}
+                else if(lev == 3){game = new TestsLev3(splashState);}
+            }
             alertMsg = ((TestGame) game).getMsg();
         }
         //if 2 --> alert message, no game started
@@ -99,23 +117,6 @@ public class Breakout extends Application {
             gamePaused = false;
         }
         alertCheck(elapsedTime);
-        /*if(game != null && !gamePaused) {
-            int res = game.step(elapsedTime);
-            if(res == -1) { // lost
-                alerter(1, "You ran out of lives! You lost and are out of the playoffs!");
-            } else if(res == 1) { // won
-                if(game.myLevel <= 2){
-                    alerter(0, "You broke all the bricks! Onto the next round!");
-                }
-                else{ alerter(0, "You beat the final level! SUPER BOWL CHAMPS!"); }
-                //alerter(0, "You broke all the bricks! You beat the level!");
-            } else if(res == 2){
-                //test success
-                alerter(2, alertMsg);
-            }else if(res ==3){
-                //test failed
-            }
-        }*/
     }
 
     /**
@@ -125,10 +126,11 @@ public class Breakout extends Application {
     public void alertCheck(double time){
         if(game != null && !gamePaused) {
             int res = game.step(time);
+            System.out.println(res);
             if(res == -1) { // lost
                 alerter(1, "You ran out of lives! You lost and are out of the playoffs!");
             } else if(res == 1) { // won
-                if(game.myLevel <= 2){
+                if(game.getMyLevel() <= 2){
                     alerter(0, "You broke all the bricks! Onto the next round!");
                 }
                 else{ alerter(0, "You beat the final level! SUPER BOWL CHAMPS!"); }
@@ -148,7 +150,6 @@ public class Breakout extends Application {
     public void resetGame(){
         stage.setScene(splashPage.getSplashScene());
         splashPage.setSplash(0);
-        game = null;
     }
 
     /**
@@ -194,18 +195,16 @@ public class Breakout extends Application {
      */
     //https://stackoverflow.com/questions/44742134/animationtimer-showandwait-is-not-allowed-during-animation-processing
     public void handleAlert(int res){
-        if(res == 1 || res == 2){
-            resetGame();
+        if(res == 1){
+            game = null;
         }
-        else{
-            game.myLevel++;
-            if(game.myLevel > 3){
-                resetGame();
-            }
-            else{
-                splashPage.setSplash(1);
+        else if(res == 0){
+            game.setMyLevel(game.getMyLevel() + 1);
+            if(game.getMyLevel() > 3){
+                game = null;
             }
         }
+        resetGame();
     }
 
     /**
