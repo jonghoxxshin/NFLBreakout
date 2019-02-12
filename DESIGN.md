@@ -1,0 +1,31 @@
+### High Level Design Goals
+For our project, we wanted to design a football themed breakout game.  My favorite team is the Dallas Cowboys, so we used them as the centerpiece (paddle and ball), and their 3 rivals as the bricks.  During our design, we really tried to make sure that our classes each only preformed one function.  In order to do this, we determined the different characters that would be involved in game play.  These came out to be the Ball, Paddle, Brick, PowerUps.  Therefore, we separated these classes into preforming their own individual functions.  
+
+Then, we focused on running the actual game itself.  We decided that the Game.java class will deal with interactions during the game such as ball collisions and brick breaks, while the Breakout class would link the starting splash page to the actual game play, and would handle ending and progressing the game through the levels.  Furthermore, we separated the SplashPage, DisplayView, and MusicPlayer into their own classes as well in order to keep class responsibilities as small and contained as possible.
+
+We implemented the TestGame.java class in order to run special cases of the game that ran our various tests.  This class extended Game.java because it is essentially running its own version of the game.  By the end of the project, we decided to turn TestGame.java into an abstract class in order to implement the three different level tests.  We also abstracted powerUp.java since there are 4 specific powerUps, all of which have essentially the same methods other than the way in which they are handled.
+
+Finally, we separated out our three handler classes.  One of them (DataHandler.java) reads information from text files in order to set up level configurations and to set initial conditions for test cases.  CollisionHandler.java handles collisions between the ball, paddle, bricks, and powerUps.  Rank is used to....... 
+
+Overall, we tried to keep our classes as small and succinct as we could, separating all aspects of the game where possible.
+    
+### Adding New Features
+In order to add a new feature, you would first have to determine which class the feature should belong to.  For example, in order to add a new powerUp, you would create an entirely new class for that powerUp that extends the abstract class powerUps.  Then, you would simply have to add this powerUp's image to the resources list, it's file name to "ALL_POWERUPS" array in powerUps.java, and increase the random number generator from 0-3 to 0-4 to account for an additional powerUp being added in Brick.java.  Finally, you would simply have to write the handlePower() method in the new powerUp class in order to determine what said powerUp does.  
+
+In order to add a new level, per say, one would simply have to create a new level text file of the same format as level1/2/3_setup.txt files.  Then, in Breakout.java, one would simply need to change the handleAlert() method from checking if level is > 3, to checking if level > 4 in order to end after the final level is defeated.
+
+### Design Choices (trade-offs)
+Two design choices that were made were to abstract the TestGame.java class and the powerUp.java class.  We did this in order to do away with some if/else if statement lines in each class.  In powerUps, these statements determined which kind of powerUp "this" was, while in TestGame.java, these statements determined which level test this test was being run for.
+
+The abstraction did away with this by creating specific powerUp classes for each individual powerUp and creating testGame classes for each level.  This definitely benefited the design of powerUp.java and TestGame.java, eliminating some if/else if statement blocks.  
+
+However, these changes slightly hurt the design of Brick.java and of Breakout.java.  This is because in Brick.java, now, instead of simply creating a powerUp() with a "type" parameter, I had to check what random number was generated in order to determine which specific powerUp class to initialize.  Therefore, some if/else if statements had to be added to Brick.java before initializing a powerUp.  This same type of issue arose in Breakout.java.  Where a TestGame had been initialized before with the level as a parameter, we were now forced to check what level the user was currently on in order to ensure that we initialized the correct testsLev#.java class.  This is seen in the step method of Breakout.java. 
+
+One additional design decision that was made was to store the image files for bricks and powerUps and the text files for levels and tests in static arrays in their respective classes.  We decided to do this because this made it easy to select which file was needed based on indexing (whether we used the powerUp #, level #, test #, or brick lives # as the index), and allowed us to avoid various "if" statements in order to pick which image correlated to which powerUp, brick, level configuration file, or test configuration file.  However, the issue with this approach is that adding additional bricks, powerUps, levels, etc. would now require these additional files to be added to the various static lists, and the index numbers to be incremented by 1 as well wherever used.    
+
+### Assumptions and Decisions
+One assumption that we made was that our test cases would not fail.  We designed these tests and specifically set the initial conditions so that they return successful results.  Therefore, in alertCheck() method in Breakout.java, there is no action taken if res == 3 (when a test fails).  
+
+Another decision we made was to separate our Test classes by level as opposed to by test number.  We felt that it would be easier to differentiate tests by level since the keys (, . /) would all represent the same number regardless of level but would run different tests based on the level.  
+
+Finally, we decided to send the user back to the splash page between each level and test because of the way that the game and test methods were initially implemented.  It made sense for us to pause the game in between each level and provide the user with the ability to decide whether or not he/she wants to continue playing or run a test case.  Additionally, handling the test keys worked from the splash page, making it a easy to handle those same keys on a per-level basis once the splash page was displayed again.  

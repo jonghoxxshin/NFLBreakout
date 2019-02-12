@@ -52,7 +52,11 @@ abstract public class TestGame extends Game {
     @Override
     abstract public int step(double elapsedTime);
 
-
+    /**
+     * Called by supclasses to run TestGame's super class's step method (Game.step)
+     * @param elapsedTime
+     * @return
+     */
     public int superStep(double elapsedTime){
         return super.step(elapsedTime);
     }
@@ -92,6 +96,10 @@ abstract public class TestGame extends Game {
         myBall.getBall().setY(y);
     }
 
+    /**
+     * Getters for various values associated with test cases (used in supclasses)
+     * @return
+     */
     public int getTestNum(){return this.testNum;}
     public int getxVel(){return this.xVel;}
     public int getyVel(){return this.yVel;}
