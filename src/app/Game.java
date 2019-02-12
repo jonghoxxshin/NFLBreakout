@@ -49,12 +49,14 @@ public class Game {
     protected List<powerUp> myPowersNew;
     protected Group myGroup;
     private int myScore;
+    private int myHighScore;
 
     //private Group root;
     private Text display;
     public boolean isPaused;
     private CollisionHandler myCollisionHandler;
     private DataHandler myDataHandler;
+
     //variables for splashPage that needs to be moved
     public Game(int lev){
         myLevel = lev;
@@ -78,6 +80,8 @@ public class Game {
 
         //Read in level set up and brick location
         myDataHandler = new DataHandler(width, height);
+        myDataHandler.readScoreFile();
+        myHighScore = myDataHandler.getCurrentHigh();
         myDataHandler.readBricks(myLevel);
         myBricks = myDataHandler.getMyBricks();
 
@@ -125,8 +129,9 @@ public class Game {
         myBall.move(elapsedTime);
         myPaddle.move(WIDTH);
 
-        display.setText("Lives remaining : " + myPaddle.getLives() + "\n Level: " + myLevel + "\n Score: " + myScore);
-
+        display.setText("Lives remaining : " + myPaddle.getLives() + "\n Level: " + myLevel + "\n Score: " + myScore + "\n High Score : " + myHighScore);
+        display.setX(WIDTH*0.7);
+        display.setY(HEIGHT*0.9);
         //Check if ball hits bottom of screen
         if(loseLifeCheck()){
             if (myPaddle.updateLives(-1) == 0) {

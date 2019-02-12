@@ -15,6 +15,7 @@ public class DataHandler {
 
     private List<Brick> myBricks;
     private List<String> testInfo;
+    private int myHighestScore;
 
     /**
      * Constructor takes in scene's height and width
@@ -108,6 +109,15 @@ public class DataHandler {
         return testInfo;
     }
 
+    public void getHighestScore(ArrayList<Rank> scoreList){
+
+        if(scoreList.size()==0){
+            myHighestScore = 0;
+        }
+        else myHighestScore =  scoreList.get(0).getMyScore();
+    }
+
+
     public void writeToFile(ArrayList<Rank> scoreList){
         try {
             File file =new File(HIGH_SCORE_FILE);
@@ -146,6 +156,7 @@ public class DataHandler {
             list.add(myRank);
         }
         Collections.sort(list);
+        getHighestScore(list);
         return list;
     }
 
@@ -169,6 +180,11 @@ public class DataHandler {
         //delete the previous file
         //rename the temp file to the same name as prev file
     }
+
+    public int getCurrentHigh(){
+        return myHighestScore;
+    }
+
 
 
 

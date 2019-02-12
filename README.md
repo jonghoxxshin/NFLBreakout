@@ -11,13 +11,13 @@ Start Date: January 28, 2019
 
 End Date: February 11, 2019
 
-Hours Spent: ~55+
+Hours Spent: ~65+
 
 ### Project Roles:
 
 Ryan Bloom: Responsible for creating Brick.java (with three types of bricks), powerUps.java (including abstractions and all 4 subclasses), CollisionHandler.java methods, DataHandler.java (to read in level formation text files as well as test text files) methods, wrote level config and test text files, Ball.java, some methods in Paddle.java that handle powerUps (speedUp(), stretch(), timeOut(), updateLives()), parts of Game.java that add brick ImageViews to the scene in createGame() and loseLifeCheck(), brickCollision(), powerHelper() helper methods below step function in Game.java.  Managed pausing and restarting of animation upon losses and wins as well as moving from one level to the next upon winning and resetting SplashPage upon losing or completing a test.  Created handleAlert() and resetGame() helper methods in Breakout.java.  Found images used in gameplay.  Wrote level test files and refactored TestGame.java to become abstract class.  Wrote TestLev1.java, TestLev2.java, TestLev3.java that extend TestGame.java abstract class. Added comments and javaDoc for the classes and methods listed above.
 
-Jongho Shin: Responsible for creating SplashPage.java and linking SplashPage to gameplay, Breakout.java, Game.java (setup, paddleCollision(), step), Paddle.java (paddle movement and finding paddle parts for collision detection with ball to allow ball to bounce more interestingly off the paddle, keyHandler for movement and cheat key usage), MusicPlayer.java (extra credit adds music to game).  Wrote initial TestGame.java (handled test key inputs through splash page and uses DataHandler to read in initial ball and paddle conditions based on test ",", ".", "/"), game and status displays (background image, level, score, lives, high score displays).
+Jongho Shin: Responsible for creating SplashPage.java and linking SplashPage to gameplay, Breakout.java, Game.java (createGame(), paddleCollision(), step), Paddle.java (paddle movement and finding paddle parts for collision detection with ball to allow ball to bounce more interestingly off the paddle, keyHandler for movement and cheat key usage), MusicPlayer.java (extra credit adds music to game, can play up to three different music at random). Responsible for making directories to have classes in a sub-directories.  Wrote initial TestGame.java (handled test key inputs through splash page and uses DataHandler to read in initial ball and paddle conditions based on test ",", ".", "/"), game and status displays (background image, level, score, lives, high score displays). Created DataHandler methods that is responsible for reading in a previous score data and Rank.java that maintains the ranking information and update all the rankings of the score and highscore. Edited images used for the background. Created DisplayView.java but was not able to fully implement due to time constraints. 
 
 ### Resources Used:  
 Online: 
@@ -30,7 +30,7 @@ Online:
 People:
 1) Consulted student (Sydney Hochberg) about strategies for reading and formatting level layout text files and test text files.
 1) Consulted student (Sydney Hochberg) about strategies for reading and formatting level layout text files and test text files.
-
+2) Consulted Benjamin Xu(TA) about how to create a more modular coding design
 ### Running the Program
 
 Main class: Breakout.java contains the main method that launches the program.
@@ -85,7 +85,7 @@ The animation.pause() method did not seem to be working upon setting alerts, so 
 
 ### Known Bugs
 One known issue occurs when detecting a ball and brick collision.  We detect whether the ball and brick have a side-side collision or top-bottom collision in order to allow the ball to bounce more naturally (solely negating x velocities if the ball hits the side of the brick, and solely negating y velocities if the ball hits the top or bottom of the brick).  This however is done in CollisionHandler.java in such a way that 2 potential bugs emerged.  First, if the ball hits near the top or bottom corner of one of the blocks but still hits a side such that the top part of the ball is above the top part of the block or the bottom part of the ball is below the bottom part of the block, it registers this as a top-bottom collision instead of a side collision.  This therefore changes the y direction as opposed to the x direction, which causes the ball to still remain in contact with the block leading to more detected collisions and eventually a block destruction as opposed to simply a bounce back.  Second, if the ball hits between 2 blocks, touching both at the same time, then the directions switch twice, negating each change.  Therefore, the ball continues to move in the same original direction destroying both bricks instead of bouncing back.
-
+Known bugs include not being able to replace the current score text file with a new one that is produced after beating the game.
 ### Notes
 We made the entire game football themed to differentiate from other breakout games.  Additionally, we added the nfl theme music to play while the game is being played in order to add more feeling to the game scene.  Creating the two abstractions that were created (for TestGame and powerUp classes) did lead to fewer if/else if statement in those classes, but did not do away with all of these statements.  This is due to the fact that these statements were still needed in order to determine which specific subclass should be initialized based on the randomly generated powerUp type in Brick.java and based on the current level in breakout.java.  I believe there might be a way to avoid these statements, but was unsure of how to do so overall.   
 
