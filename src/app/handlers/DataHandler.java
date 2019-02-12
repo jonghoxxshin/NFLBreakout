@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 public class DataHandler {
     private String[] levelFiles = {"level1_setup.txt", "level2_setup.txt", "level3_setup.txt"};
-    private String[][] testFiles = {{"test_1_lv1.txt", "test_2_lv1.txt", "test_3_lv1.txt"}, {"test_1_lv2.txt", "test_2_lv2.txt", "test_3_lv2.txt"}, {"test_1_lv3.txt", "test_2_lv3.txt", "test_3_lv3.txt"}};
+    private String[][] testFiles = {{"lv1_test1.txt", "lv1_test2.txt", "lv1_test3.txt"}, {"lv2_test1.txt", "lv2_test2.txt", "lv2_test3.txt"}, {"lv3_test1.txt", "lv3_test2.txt", "lv3_test3.txt"}};
     private double width,height;
 
     private List<Brick> myBricks;
