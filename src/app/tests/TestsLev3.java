@@ -21,19 +21,19 @@ public class TestsLev3 extends TestGame {
             myGroup.getChildren().add(temp.getPowerImg());
             myPowersNew.add(temp);
         }
-        if(getTestNum() == 4){//"." speedUp power
+        else if(getTestNum() == 4){//"." speedUp power
             var temp = new SpeedUp(getX(), getY(), 40);
             myGroup.getChildren().add(temp.getPowerImg());
             myPowersNew.add(temp);
         }
-        if(getTestNum() == 5){//"/" paddle hit test
+        else if(getTestNum() == 5){//"/" paddle hit test
             setBallHelper();
         }
         return scene;
     }
 
     @Override
-    public int step(double elapsedTime) {
+    public int step(double time) {
         if(getTestNum() == 3 && myPaddle.getPaddleWidth() > 80){
             return 2;
         }
@@ -43,6 +43,6 @@ public class TestsLev3 extends TestGame {
         if(myBall.getBall().getX() > 450 || myBall.getBall().getX() < 350){
             return 2;
         }
-        return superStep(elapsedTime);
+        return superStep(time);
     }
 }

@@ -126,6 +126,7 @@ public class Breakout extends Application {
     public void alertCheck(double time){
         if(game != null && !gamePaused) {
             int res = game.step(time);
+            System.out.println(res);
             if(res == -1) { // lost
                 alerter(1, "You ran out of lives! You lost and are out of the playoffs!");
             } else if(res == 1) { // won

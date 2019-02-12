@@ -97,7 +97,7 @@ public class DataHandler {
     public List<String> readTestFiles(int testNum, int level){
         testInfo = new ArrayList<>();
         String testFile = testFiles[level-1][testNum-3];
-        System.out.println(testFile);
+        //System.out.println(testFile);
         Scanner scan = new Scanner(this.getClass().getClassLoader().getResourceAsStream(testFile));
         while(scan.hasNext()){
             String temp = scan.nextLine();
