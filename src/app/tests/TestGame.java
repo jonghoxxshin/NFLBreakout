@@ -23,10 +23,12 @@ abstract public class TestGame extends Game {
      * Constructor creates mock game when a test key is pressed to initialize tests
      * @param testNum
      */
+
     public TestGame(int testNum, int level) {
         super(level);
         //myLevel = level;
         this.scene = super.createGame();
+
         this.testNum = testNum;
         //Reads test info data from text files
         this.datRead = new DataHandler(0, 0);

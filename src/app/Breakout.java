@@ -12,7 +12,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
@@ -50,6 +49,7 @@ public class Breakout extends Application {
     private SplashPage splashPage;
     private Game game;
     private String alertMsg;
+    private MusicPlayer myMusicPlayer;
     private boolean gamePaused = false;
 
     /**
@@ -66,15 +66,10 @@ public class Breakout extends Application {
         stage.show();
         stage.setScene(splashPage.getSplashScene());
 
-        String path = null;
-        try {
-            path = Game.class.getClassLoader().getResource("superbowl-music.wav").toURI().toString();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-        Media media = new Media(path);
-        MediaPlayer mp = new MediaPlayer(media);
-        mp.setAutoPlay(true);
+        myMusicPlayer = new MusicPlayer();
+        myMusicPlayer.check();
+
+
         //MediaView mediaView = new MediaView(mp);
 
         // attach "game loop" to timeline to play it
@@ -119,6 +114,7 @@ public class Breakout extends Application {
             gamePaused = false;
         }
         alertCheck(elapsedTime);
+
     }
 
     /**
@@ -135,7 +131,10 @@ public class Breakout extends Application {
                 if(game.getMyLevel() <= 2){
                     alerter(0, "You broke all the bricks! Onto the next round!");
                 }
-                else{ alerter(0, "You beat the final level! SUPER BOWL CHAMPS!"); }
+                else{
+                    game.getDataHandler().updateHighScore(game.getScore());
+                    alerter(0, "You beat the final level! SUPER BOWL CHAMPS!");
+                }
                 //alerter(0, "You broke all the bricks! You beat the level!");
             } else if(res == 2){
                 //test success

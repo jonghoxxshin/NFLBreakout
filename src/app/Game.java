@@ -19,8 +19,6 @@ import java.util.List;
 
 
 import static app.Breakout.HEIGHT;
-import static javafx.application.Application.getUserAgentStylesheet;
-
 
 /**
  * A basic example JavaFX program for the first lab.
@@ -33,6 +31,7 @@ import static javafx.application.Application.getUserAgentStylesheet;
  *
  * * @author Robert C. Duvall
  */
+
 public class Game {
     public static final Paint BACKGROUND = Color.LIGHTGREEN;
     public static final Image FIELD = new Image("Half.png");
@@ -50,12 +49,14 @@ public class Game {
     protected List<powerUp> myPowersNew;
     protected Group myGroup;
     private int myScore;
+    private int myHighScore;
 
     //private Group root;
     private Text display;
     public boolean isPaused;
     private CollisionHandler myCollisionHandler;
     private DataHandler myDataHandler;
+
     //variables for splashPage that needs to be moved
     public Game(int lev){
         myLevel = lev;
@@ -79,6 +80,8 @@ public class Game {
 
         //Read in level set up and brick location
         myDataHandler = new DataHandler(width, height);
+        myDataHandler.readScoreFile();
+        myHighScore = myDataHandler.getCurrentHigh();
         myDataHandler.readBricks(myLevel);
         myBricks = myDataHandler.getMyBricks();
 
@@ -126,8 +129,9 @@ public class Game {
         myBall.move(elapsedTime);
         myPaddle.move(WIDTH);
 
-        display.setText("Lives remaining : " + myPaddle.getLives() + "\n Level: " + myLevel + "\n Score: " + myScore);
-
+        display.setText("Lives remaining : " + myPaddle.getLives() + "\n Level: " + myLevel + "\n Score: " + myScore + "\n High Score : " + myHighScore);
+        display.setX(WIDTH*0.7);
+        display.setY(HEIGHT*0.9);
         //Check if ball hits bottom of screen
         if(loseLifeCheck()){
             if (myPaddle.updateLives(-1) == 0) {
@@ -223,6 +227,15 @@ public class Game {
         }
     }
 
+    public DataHandler getDataHandler(){
+        return myDataHandler;
+    }
+
+    public int getScore(){
+        return myScore;
+    }
+
     public void setMyLevel(int i){this.myLevel = i;}
     public int getMyLevel(){return this.myLevel;}
+
 }

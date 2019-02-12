@@ -2,17 +2,20 @@ package app.handlers;
 
 import app.sprite.Brick;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.io.*;
+import java.lang.reflect.Array;
+import java.util.*;
 
 public class DataHandler {
+    public static final String HIGH_SCORE_FILE = "high_score.txt";
+
     private String[] levelFiles = {"level1_setup.txt", "level2_setup.txt", "level3_setup.txt"};
     private String[][] testFiles = {{"lv1_test1.txt", "lv1_test2.txt", "lv1_test3.txt"}, {"lv2_test1.txt", "lv2_test2.txt", "lv2_test3.txt"}, {"lv3_test1.txt", "lv3_test2.txt", "lv3_test3.txt"}};
     private double width,height;
 
     private List<Brick> myBricks;
     private List<String> testInfo;
+    private int myHighestScore;
 
     /**
      * Constructor takes in scene's height and width
@@ -105,6 +108,86 @@ public class DataHandler {
         }
         return testInfo;
     }
+
+    public void getHighestScore(ArrayList<Rank> scoreList){
+
+        if(scoreList.size()==0){
+            myHighestScore = 0;
+        }
+        else myHighestScore =  scoreList.get(0).getMyScore();
+    }
+
+
+    public void writeToFile(ArrayList<Rank> scoreList){
+        try {
+            File file =new File(HIGH_SCORE_FILE);
+            Writer output = null;
+            output = new BufferedWriter(new FileWriter(file));
+            for(int i = 0; i<scoreList.size();i++){
+                output.write(scoreList.get(i).toString());
+            }
+            output.flush();
+            output.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    public ArrayList<Rank> addRankToList(int score, ArrayList<Rank> list){
+        int  tempScore = score;
+        ArrayList<Rank> newList = new ArrayList<>();
+        newList = list;
+        Rank tempRank = new Rank(score);
+        list.add(tempRank);
+        Collections.sort(list);
+        tempRank.setMyRanking(list.indexOf(tempRank)+1);
+        return newList;
+    }
+
+    public ArrayList<Rank> readScoreFile(){
+        ArrayList<Rank> list = new ArrayList<>();
+        var input = new Scanner(this.getClass().getClassLoader().getResourceAsStream(HIGH_SCORE_FILE));
+        String[] temp = {};
+        while(input.hasNext()) {
+            temp = input.next().split(",");
+            Rank myRank = new Rank(Integer.parseInt(temp[0]), Integer.parseInt(temp[1]));
+            list.add(myRank);
+        }
+        Collections.sort(list);
+        getHighestScore(list);
+        return list;
+    }
+
+    public void updateRanking(ArrayList<Rank> in){
+        for(int i = 0; i<in.size();i++){
+            in.get(i).setMyRanking(i+1);
+        }
+    }
+
+
+    public void updateHighScore(int score){
+        ArrayList<Rank> previousList;
+        //read in from current file
+        previousList = readScoreFile();
+        ArrayList<Rank> newList;
+        newList = addRankToList(score, previousList);
+        updateRanking(newList);
+        writeToFile(newList);
+        //create a data structure from it (like linked list or something
+        //get a temp file to rewrite
+        //delete the previous file
+        //rename the temp file to the same name as prev file
+    }
+
+    public int getCurrentHigh(){
+        return myHighestScore;
+    }
+
+
+
+
 
     /**
      * Getter function returns bricks that were read in from data file
