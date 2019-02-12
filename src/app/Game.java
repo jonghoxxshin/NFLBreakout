@@ -215,4 +215,12 @@ public class Game {
             myScore += p.catchPower(myPaddle, myBall);
         }
     }
+
+    public DataHandler getDataHandler(){
+        return myDataHandler;
+    }
+
+    public int getScore(){
+        return myScore;
+    }
 }

@@ -121,6 +121,7 @@ public class DataHandler {
             e.printStackTrace();
         }
 
+
     }
 
     public ArrayList<Rank> addRankToList(int score, ArrayList<Rank> list){
@@ -153,6 +154,7 @@ public class DataHandler {
         }
     }
 
+
     public void updateHighScore(int score){
         ArrayList<Rank> previousList;
         //read in from current file
@@ -165,8 +167,9 @@ public class DataHandler {
         //get a temp file to rewrite
         //delete the previous file
         //rename the temp file to the same name as prev file
-
     }
+
+
 
 
     /**

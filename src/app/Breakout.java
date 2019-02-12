@@ -131,7 +131,10 @@ public class Breakout extends Application {
                 if(game.myLevel <= 2){
                     alerter(0, "You broke all the bricks! Onto the next round!");
                 }
-                else{ alerter(0, "You beat the final level! SUPER BOWL CHAMPS!"); }
+                else{
+                    game.getDataHandler().updateHighScore(game.getScore());
+                    alerter(0, "You beat the final level! SUPER BOWL CHAMPS!");
+                }
                 //alerter(0, "You broke all the bricks! You beat the level!");
             } else if(res == 2){
                 //test success
