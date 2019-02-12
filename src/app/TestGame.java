@@ -21,8 +21,9 @@ public class TestGame extends Game {
      * @param testNum
      */
     public TestGame(int testNum) {
-        super(1);
+        super(3);
         this.scene = super.createGame();
+
         this.testNum = testNum;
         //Reads test info data from text files
         this.datRead = new DataHandler(0, 0);

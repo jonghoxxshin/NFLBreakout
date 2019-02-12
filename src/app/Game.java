@@ -19,8 +19,6 @@ import java.util.List;
 
 
 import static app.Breakout.HEIGHT;
-import static javafx.application.Application.getUserAgentStylesheet;
-
 
 /**
  * A basic example JavaFX program for the first lab.
@@ -33,6 +31,7 @@ import static javafx.application.Application.getUserAgentStylesheet;
  *
  * * @author Robert C. Duvall
  */
+
 public class Game {
     public static final Paint BACKGROUND = Color.LIGHTGREEN;
     public static final Image FIELD = new Image("Half.png");
