@@ -6,6 +6,8 @@ import app.sprite.Paddle;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+import java.util.Objects;
+
 import static app.Breakout.HEIGHT;
 
 abstract public class powerUp {
@@ -109,4 +111,25 @@ abstract public class powerUp {
      * @param ball
      */
     abstract public void handlePower(Paddle paddle, Ball ball);
+
+    /**
+     * Implement equals and hashCode for collections
+     * @param o
+     * @return
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        powerUp powerUp = (powerUp) o;
+        return myType == powerUp.myType &&
+                Double.compare(powerUp.myPosX, myPosX) == 0 &&
+                Double.compare(powerUp.myPosY, myPosY) == 0 &&
+                Live == powerUp.Live &&
+                Objects.equals(myPower, powerUp.myPower);
+    }
+    @Override
+    public int hashCode() {
+        return Objects.hash(myType, myPosX, myPosY, myPower, Live);
+    }
 }

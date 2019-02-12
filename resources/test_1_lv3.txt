@@ -1,0 +1,3 @@
+390 300
+0 1
+Stretcher_Power-SIZE_INCREASED

@@ -18,10 +18,10 @@ public class Paddle {
 
     private ImageView myPaddle;
     private int myLives;
-    private double paddle_speed = 10;
+    private double paddleSpeed = 10;
     private double paddleWidth = 80;
 
-    private double paddle_velocity = 0;
+    private double paddleVelocity = 0;
     private Set<KeyCode> currentlyPressed = new HashSet<>();
 
     double screenWidth, screenHeight;
@@ -94,10 +94,10 @@ public class Paddle {
      * Set velocity of paddle
      * @param v
      */
-    private void setVX(double v) { paddle_velocity = v; }
+    private void setVX(double v) { paddleVelocity = v; }
 
     public void move(double screenWidth) {
-        myPaddle.setX(Math.max(Math.min(myPaddle.getX() + paddle_velocity, screenWidth-myPaddle.getFitWidth()), 0));
+        myPaddle.setX(Math.max(Math.min(myPaddle.getX() + paddleVelocity, screenWidth-myPaddle.getFitWidth()), 0));
     }
 
     public void handleKeyReleased(KeyCode code) {
@@ -105,8 +105,8 @@ public class Paddle {
         if(currentlyPressed.size() == 0) {
             setVX(0);
         } else {
-            if(currentlyPressed.iterator().next() == KeyCode.LEFT) setVX(-paddle_speed);
-            else setVX(paddle_speed);
+            if(currentlyPressed.iterator().next() == KeyCode.LEFT) setVX(-paddleSpeed);
+            else setVX(paddleSpeed);
         }
     }
 
@@ -117,11 +117,11 @@ public class Paddle {
      */
     public void handleKeyPressed(KeyCode code, Ball ball){
         if(code == KeyCode.RIGHT){
-            setVX(paddle_speed);
+            setVX(paddleSpeed);
             currentlyPressed.add(code);
         }
         else if(code == KeyCode.LEFT){
-            setVX(-paddle_speed);
+            setVX(-paddleSpeed);
             currentlyPressed.add(code);
         }
         else if(code == KeyCode.L){
@@ -164,7 +164,7 @@ public class Paddle {
      * Handles "stretcher" powerUp -> increases paddle size to 150px for 5 seconds
      */
     public void stretch(){
-        setPaddle(paddle_speed, 150);
+        setPaddle(paddleSpeed, 150);
         timeOut("stretch");
     }
 
@@ -179,7 +179,7 @@ public class Paddle {
             @Override
             public void run() {
                 if(powType.equals("stretch")){
-                    setPaddle(paddle_speed, 80);
+                    setPaddle(paddleSpeed, 80);
                 }
                 else{
                     setPaddle(10, paddleWidth);
@@ -197,8 +197,15 @@ public class Paddle {
      */
     public void setPaddle(double speed, double width){
         myPaddle.setFitWidth(width);
-        paddle_speed = speed;
+        paddleSpeed = speed;
         paddleWidth = width;
         myPaddle.setFitHeight(PADDLE_HEIGHT);
     }
+
+    /**
+     * Getter method to check paddle width for level 3 test 1
+     * @return
+     */
+    public double getPaddleWidth(){return this.paddleWidth;}
+    public double getPaddleSpeed() {return this.paddleSpeed;}
 }
