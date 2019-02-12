@@ -10,11 +10,11 @@ public class DataHandler {
     public static final String HIGH_SCORE_FILE = "high_score.txt";
 
     private String[] levelFiles = {"level1_setup.txt", "level2_setup.txt", "level3_setup.txt"};
-    private String[] testFiles = {"test_1.txt", "test_2.txt", "test_3.txt"};
+    private String[][] testFiles = {{"test_1_lv1.txt", "test_2_lv1.txt", "test_3_lv1.txt"}, {"test_1_lv2.txt", "test_2_lv2.txt", "test_3_lv2.txt"}, {"test_1_lv3.txt", "test_2_lv3.txt", "test_3_lv3.txt"}};
     private double width,height;
 
-    public List<Brick> myBricks;
-    public List<String> testInfo;
+    private List<Brick> myBricks;
+    private List<String> testInfo;
 
     /**
      * Constructor takes in scene's height and width
@@ -96,9 +96,10 @@ public class DataHandler {
      * @param testNum
      * @return
      */
-    public List<String> readTestFiles(int testNum){
+    public List<String> readTestFiles(int testNum, int level){
         testInfo = new ArrayList<>();
-        String testFile = testFiles[testNum-3];
+        String testFile = testFiles[level-1][testNum-3];
+        //System.out.println(testFile);
         Scanner scan = new Scanner(this.getClass().getClassLoader().getResourceAsStream(testFile));
         while(scan.hasNext()){
             String temp = scan.nextLine();
@@ -177,5 +178,5 @@ public class DataHandler {
      * @returnz
      */
     public List<Brick> getMyBricks() {return myBricks;}
-
+    public List<String> getMyTestInfo() {return testInfo;}
 }

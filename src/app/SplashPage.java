@@ -64,7 +64,7 @@ public class SplashPage{
 
 
         //start text
-        gameStart = new Text(scene.getWidth()*0.21, scene.getHeight()*0.69, "Press space or click the Button to start playing!");
+        gameStart = new Text(scene.getWidth()*0.21, scene.getHeight()*0.69, "Press space, enter, or click anywhere to start playing!");
         gameStart.setFont(Font.font("Helvetica", FontWeight.EXTRA_BOLD, 20));
         gameStart.setFill(Color.BLUE);
 
