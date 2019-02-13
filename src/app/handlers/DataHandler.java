@@ -4,6 +4,7 @@ import app.sprite.Brick;
 
 import java.io.*;
 import java.lang.reflect.Array;
+import java.net.URISyntaxException;
 import java.util.*;
 
 public class DataHandler {
@@ -120,15 +121,22 @@ public class DataHandler {
 
     public void writeToFile(ArrayList<Rank> scoreList){
         try {
-            File file =new File(HIGH_SCORE_FILE);
-            Writer output = null;
-            output = new BufferedWriter(new FileWriter(file));
-            for(int i = 0; i<scoreList.size();i++){
+            File file = new File(this.getClass().getClassLoader().getResource(HIGH_SCORE_FILE).toURI());
+            if(!file.exists()) {
+                if(!file.createNewFile()) {
+                    System.out.println("fail");
+                    return;
+                }
+            }
+
+            System.out.println(file.getAbsolutePath());
+
+            var output = new BufferedWriter(new FileWriter(file));
+            for (int i = 0; i < scoreList.size(); i++) {
                 output.write(scoreList.get(i).toString());
             }
-            output.flush();
             output.close();
-        } catch (IOException e) {
+        } catch (IOException | URISyntaxException e) {
             e.printStackTrace();
         }
 
@@ -148,15 +156,21 @@ public class DataHandler {
 
     public ArrayList<Rank> readScoreFile(){
         ArrayList<Rank> list = new ArrayList<>();
-        var input = new Scanner(this.getClass().getClassLoader().getResourceAsStream(HIGH_SCORE_FILE));
-        String[] temp = {};
-        while(input.hasNext()) {
-            temp = input.next().split(",");
-            Rank myRank = new Rank(Integer.parseInt(temp[0]), Integer.parseInt(temp[1]));
-            list.add(myRank);
-        }
-        Collections.sort(list);
-        getHighestScore(list);
+        try {
+            var file = new File(this.getClass().getClassLoader().getResource(HIGH_SCORE_FILE).toURI());
+            System.out.println(file.getAbsolutePath());
+            var input = new Scanner(file);
+            String[] temp = {};
+            while (input.hasNext()) {
+                temp = input.next().split(",");
+                Rank myRank = new Rank(Integer.parseInt(temp[0]), Integer.parseInt(temp[1]));
+                list.add(myRank);
+            }
+            Collections.sort(list);
+            getHighestScore(list);
+        } catch(Exception e) {
+            e.printStackTrace();
+;        }
         return list;
     }
 
