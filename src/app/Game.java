@@ -10,6 +10,8 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
@@ -72,7 +74,6 @@ public class Game {
         double width = bkg.getWidth();
         double height = bkg.getHeight() - 100;
         var scene = new Scene(root, width, height, BACKGROUND);
-
         ImageView mv = new ImageView(bkg);
         myBall = new Ball(scene.getWidth() / 2, scene.getHeight() - 100);
         myPaddle = new Paddle(width, height);
