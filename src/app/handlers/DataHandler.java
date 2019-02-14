@@ -110,6 +110,11 @@ public class DataHandler {
         return testInfo;
     }
 
+    /**
+     * Given a sorted ArrayList of Ranks, finds the highest score and updates the private variable myHighestScore
+     * @param scoreList
+     */
+
     public void getHighestScore(ArrayList<Rank> scoreList){
 
         if(scoreList.size()==0){
@@ -118,18 +123,18 @@ public class DataHandler {
         else myHighestScore =  scoreList.get(0).getMyScore();
     }
 
-
+    /**
+     * Given a sorted ArrayList of Ranks, writes the ranking out to a text file named HIGH_SCORE_FILE
+     * @param scoreList
+     */
     public void writeToFile(ArrayList<Rank> scoreList){
         try {
             File file = new File(this.getClass().getClassLoader().getResource(HIGH_SCORE_FILE).toURI());
             if(!file.exists()) {
                 if(!file.createNewFile()) {
-                    System.out.println("fail");
                     return;
                 }
             }
-
-            System.out.println(file.getAbsolutePath());
 
             var output = new BufferedWriter(new FileWriter(file));
             for (int i = 0; i < scoreList.size(); i++) {
@@ -143,6 +148,13 @@ public class DataHandler {
 
     }
 
+    /**
+     * Given an arrayList of Ranks and a score, the score is added to the
+     * list and the list is sorted and the score is given a subsequent rank
+     * @param score
+     * @param list
+     * @return A sorted rank list with the new score added with its appropriate rank
+     */
     public ArrayList<Rank> addRankToList(int score, ArrayList<Rank> list){
         int  tempScore = score;
         ArrayList<Rank> newList = new ArrayList<>();
@@ -154,11 +166,15 @@ public class DataHandler {
         return newList;
     }
 
+    /**
+     * Reads in a text file that is named HIGH_SCORE_FILE and forms ArrayList of Rank objects
+     * and sorts that list based on the score value of each Rank object
+     * @return Sorted ArrayList of Ranks that is read from an text file that contains the past scores.
+     */
     public ArrayList<Rank> readScoreFile(){
         ArrayList<Rank> list = new ArrayList<>();
         try {
             var file = new File(this.getClass().getClassLoader().getResource(HIGH_SCORE_FILE).toURI());
-            System.out.println(file.getAbsolutePath());
             var input = new Scanner(file);
             String[] temp = {};
             while (input.hasNext()) {
@@ -174,13 +190,22 @@ public class DataHandler {
         return list;
     }
 
+    /**
+     * Given an ArrayList of Ranks as input, updates the rank of each of the Rank object while iterating
+     * through the list
+     * @param in
+     */
     public void updateRanking(ArrayList<Rank> in){
         for(int i = 0; i<in.size();i++){
             in.get(i).setMyRanking(i+1);
         }
     }
 
-
+    /**
+     * Given a score, adds a new score the the file and forms a new text file with the new score placed and
+     * sorted in rank
+     * @param score
+     */
     public void updateHighScore(int score){
         ArrayList<Rank> previousList;
         //read in from current file
@@ -189,12 +214,13 @@ public class DataHandler {
         newList = addRankToList(score, previousList);
         updateRanking(newList);
         writeToFile(newList);
-        //create a data structure from it (like linked list or something
-        //get a temp file to rewrite
-        //delete the previous file
-        //rename the temp file to the same name as prev file
+
     }
 
+    /**
+     * Return current highscore
+     * @return current highscore
+     */
     public int getCurrentHigh(){
         return myHighestScore;
     }
@@ -205,8 +231,8 @@ public class DataHandler {
 
     /**
      * Getter function returns bricks that were read in from data file
-     * @returnz
+     * @return return the ArrayList of bricks
      */
     public List<Brick> getMyBricks() {return myBricks;}
-    public List<String> getMyTestInfo() {return testInfo;}
+
 }

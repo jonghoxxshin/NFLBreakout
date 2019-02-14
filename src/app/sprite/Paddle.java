@@ -12,6 +12,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class Paddle {
+
     public static final String PADDLE_IMAGE = "paddle.png";
     public static final long PADDLE_HEIGHT = 10;
 
@@ -20,7 +21,6 @@ public class Paddle {
     private int myLives;
     private double paddleSpeed = 10;
     private double paddleWidth = 80;
-
     private double paddleVelocity = 0;
     private Set<KeyCode> currentlyPressed = new HashSet<>();
 
@@ -48,7 +48,7 @@ public class Paddle {
      * Called when ball hits bottom of screen (lose life) or when paddle catches extra life powerUp
      * Returns 0 when lose game (lives = 0)
      * @param i
-     * @return
+     * @return an interger value 0 when the game is lost, returns 1 otherwise
      */
     public int updateLives(int i){
         myLives += i;
@@ -71,7 +71,7 @@ public class Paddle {
     /**
      * Used to vary the bounce of ball upon paddle collision depending on location that the ball hits the paddle
      * @param idx
-     * @return
+     * @return imageView of the paddle object
      */
     public ImageView getPaddlePart(int idx) {
         var dummy = new ImageView();
@@ -96,10 +96,22 @@ public class Paddle {
      */
     private void setVX(double v) { paddleVelocity = v; }
 
+    /**
+     * A move method for this paddle to be invoked during evey step of the game
+     * Checks the boundaries of the screen to make sure that the paddle does not move
+     * out of the screen
+     * @param screenWidth
+     */
     public void move(double screenWidth) {
         myPaddle.setX(Math.max(Math.min(myPaddle.getX() + paddleVelocity, screenWidth-myPaddle.getFitWidth()), 0));
     }
 
+    /**
+     * A handler method for when a key is released.
+     * If the key going the opposite of current direction is still pressed
+     * change the moving direction of paddle to that direction
+     * @param code
+     */
     public void handleKeyReleased(KeyCode code) {
         currentlyPressed.remove(code);
         if(currentlyPressed.size() == 0) {
@@ -140,15 +152,6 @@ public class Paddle {
         }
         else if(code == KeyCode.B){
             ball.pumpPower();
-        }
-        else if(code == KeyCode.COMMA){
-
-        }
-        else if(code == KeyCode.PERIOD){
-
-        }
-        else if(code == KeyCode.SLASH){
-
         }
     }
 
@@ -204,8 +207,13 @@ public class Paddle {
 
     /**
      * Getter method to check paddle width for level 3 test 1
-     * @return
+     * @return a double value of paddleWidth for this object
      */
     public double getPaddleWidth(){return this.paddleWidth;}
+
+    /**
+     * Getter method to get the speed of paddle
+     * @return a double value of paddleSpeed for this object
+     */
     public double getPaddleSpeed() {return this.paddleSpeed;}
 }

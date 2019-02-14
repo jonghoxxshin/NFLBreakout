@@ -17,9 +17,7 @@ public class SplashPage{
 
 
     public final static String HOW_TO = "Move the paddle by pressing the left and right arrows on your keyboard. \n" +
-            "Break all the opponent blocks before losing all your lives!";
-    public static final int FRAMES_PER_SECOND = 60;
-
+                                        "Break all the opponent blocks before losing all your lives!";
 
     private Text title;
     private Text instruction;
@@ -28,11 +26,15 @@ public class SplashPage{
     private int splash = 0; // 0 -> on splash 1 -> to game 2 -> on game       3 -> test1 4 -> test2 5 -> test3
     private Scene splashScene;
 
+    /**
+     * Constructor for the splashPage, takes Paint value as
+     * an input that colors the background in that paint value
+     * and receives a scene value from setupSplash()
+     * @param background
+     */
     public SplashPage(Paint background){
         splashScene = setupSplash(background);
     }
-
-    public Scene getSplashScene() { return splashScene; }
 
     private Scene setupSplash(Paint background){
         var root = new Group();
@@ -43,32 +45,23 @@ public class SplashPage{
 
         var scene = new Scene(root, bkg.getWidth(), bkg.getHeight() - 100, background);
 
-        //title
         title = new Text(scene.getWidth()* 0.27, scene.getHeight() * 0.49, "NFL Break-Out!\n");
         title.setFont(Font.font("Helvetica", FontWeight.EXTRA_BOLD, 45));
         title.setFill(Color.BLUE);
 
-        //nfl logo
         mvNfl.setFitWidth(100);
         mvNfl.setFitHeight(100);
         mvNfl.setX(300);
         mvNfl.setY(150);
 
-
-        //instruction
         instruction = new Text(scene.getWidth() * 0.2, scene.getHeight() *0.57, HOW_TO);
-        //instruction = new Text(HOW_TO);
-        //instruction.setTextAlignment(TextAlignment.CENTER);
         instruction.setFont(Font.font("Helvetica", FontWeight.BOLD, 15));
         instruction.setFill(Color.BLUE);
 
-
-        //start text
         gameStart = new Text(scene.getWidth()*0.21, scene.getHeight()*0.69, "Press space, enter, or click anywhere to start next level!");
         gameStart.setFont(Font.font("Helvetica", FontWeight.EXTRA_BOLD, 20));
         gameStart.setFill(Color.BLUE);
 
-        //start button
         startButton = new Button("Start!");
         startButton.setLayoutX(300);
         startButton.setLayoutY(scene.getHeight()-100);
@@ -91,14 +84,36 @@ public class SplashPage{
         return scene;
     }
 
+    /**
+     * Getter method for the Scene value of this splashpage
+     * @return
+     */
+    public Scene getSplashScene() { return splashScene; }
+
+    /**
+     * Handler method for mouse input, when pressed anywhere on the screen
+     * moves to playing game by setting the splash value to 1
+     * @param x
+     * @param y
+     */
     public void handleMouseInput(double x, double y){
         this.setSplash(1);
     }
 
+    /**
+     * Getter method for integer splash value which returns
+     * instance variable splash
+     * @return integer value of splash
+     */
     public int getSplash(){
         return splash;
     }
 
+    /**
+     * Setter method for boolean splash value
+     * that sets the value of instance variable splash
+     * @param state
+     */
     public void setSplash(int state){
         this.splash = state;
     }

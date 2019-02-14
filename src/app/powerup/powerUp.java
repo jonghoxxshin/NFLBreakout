@@ -128,6 +128,11 @@ abstract public class powerUp {
                 Live == powerUp.Live &&
                 Objects.equals(myPower, powerUp.myPower);
     }
+
+    /**
+     * Generates a hashcode for a sequence of input values, as if the values where put into an array
+     * @return a hash value of sequence of intput values
+     */
     @Override
     public int hashCode() {
         return Objects.hash(myType, myPosX, myPosY, myPower, Live);
