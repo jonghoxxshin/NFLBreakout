@@ -109,7 +109,10 @@ public class Ball {
      * @param i
      */
     public void setVeloX(int i){this.myVeloX = i;}
+
+    //
     public int getMyVeloX(){return this.myVeloX;}
+
     public void setVeloY(int i){this.myVeloY = i;}
 
     /**

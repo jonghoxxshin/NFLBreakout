@@ -7,17 +7,18 @@ import javafx.scene.Scene;
 import java.util.List;
 
 abstract public class TestGame extends Game {
-    private int testNum;
+
     protected Scene scene;
+
+    private int testNum;
     private DataHandler datRead;
     private List<String> testInfo;
-
     private int x;
     private int y;
     private int xVel;
     private int yVel;
     private String testMsg;
-    //private int myLevel;
+
 
     /**
      * Constructor creates mock game when a test key is pressed to initialize tests

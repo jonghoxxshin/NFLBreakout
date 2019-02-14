@@ -10,26 +10,13 @@ import javafx.application.Application;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import java.net.URISyntaxException;
-
-
 /**
- * A basic example JavaFX program for the first lab.
- *
- * Cool! No WAY!! YETALLY!
- *
- * Branched dude!
- *
- * Right on
- *
- * * @author Ryan Bloom & Jongho Shin
+ * @author Ryan Bloom & Jongho Shin
  */
 public class Breakout extends Application {
 
@@ -40,10 +27,9 @@ public class Breakout extends Application {
     public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
     public static final Paint BACKGROUND = Color.LIGHTGREEN;
     public static final Image FIELD = new Image("Half.png");
-
     public static final ImageView BKG_VIEW = new ImageView(FIELD);
-    private static final double WIDTH = 684;
 
+    private static final double WIDTH = 684;
     private Timeline animation;
     private Stage stage;
     private SplashPage splashPage;
@@ -53,9 +39,11 @@ public class Breakout extends Application {
     private boolean gamePaused = false;
 
     /**
-     * Initialize what will be displayed and how it will be updated.
-     *
-     * Wahtever
+     * A main function called by the launch(args) call
+     * that displays the scene from the splashPage object,
+     * initiates the myMusicPlayer object and invokes a
+     * step function for every 1/1000 of a second
+     * @param stage
      */
     @Override
     public void start (Stage stage) {
@@ -69,9 +57,6 @@ public class Breakout extends Application {
         myMusicPlayer = new MusicPlayer();
         myMusicPlayer.check();
 
-
-        //MediaView mediaView = new MediaView(mp);
-
         // attach "game loop" to timeline to play it
         var frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> step(SECOND_DELAY));
         animation = new Timeline();
@@ -80,8 +65,7 @@ public class Breakout extends Application {
         animation.play();
     }
 
-    // Change properties of shapes to animate them
-    // Note, there are more sophisticated ways to animate shapes, but these simple ways work fine to start.
+
     private void step (double elapsedTime) {
         int splashState = splashPage.getSplash();
         //If game != null --> level was beaten and increment to next level

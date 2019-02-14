@@ -40,7 +40,7 @@ public class Game {
     public static final ImageView BKG_VIEW = new ImageView(FIELD);
     private static final double WIDTH = 684;
 
-    // some things we need to remember during our game
+
     protected Ball myBall;
     protected Paddle myPaddle;
     protected int numBricks;

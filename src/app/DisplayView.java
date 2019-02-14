@@ -12,30 +12,33 @@ import javafx.scene.text.Font;
 
 public class DisplayView {
     private Pane root;
-
     private int myScore;
     private int myLives;
     private int myLevel;
 
-    public DisplayView(){
 
-    }
-
+    /**
+     * Constructor for DisplayView object
+     * @param score
+     * @param lives
+     * @param level
+     */
     public DisplayView(int score, int lives, int level){
         myScore = score;
         myLives = lives;
         myLevel = level;
     }
 
+    /**
+     * Initiates the pane value of the display View object
+     */
     public void setView(){
         root = new Pane();
         root.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
-
         TextArea displayArea = new TextArea();
         displayArea.setFont(new Font(16));
         displayArea.setText("Lives remaining : " + myLives + "\n Level: " + myLevel + "\n Score: " + myScore);
         root.getChildren().add(displayArea);
-
     }
 
 
